@@ -469,7 +469,9 @@ function wireP26(){
 let p26Timer=null;
 function scheduleP26(){clearTimeout(p26Timer);p26Timer=setTimeout(wireP26,180)}
 window.addEventListener('hashchange',scheduleP26);window.addEventListener('load',scheduleP26);
-const p26Obs=new MutationObserver(scheduleP26);p26Obs.observe(document.documentElement,{childList:true,subtree:true});
+/* Prueba 28: eliminado el MutationObserver de Prueba 26.
+   Los contadores se cargan al abrir/cambiar de máquina, evitando el bucle número ↔ … */
+
 </script>
 
 
