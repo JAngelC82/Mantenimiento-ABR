@@ -407,7 +407,8 @@ function rowsP26(j){return(j.table?.rows||[]).map(r=>(r.c||[]).map(c=>c?(c.f??c.
 async function loadMachineStatusP26(){
   const cur=currentMachineP26();if(!cur)return;
   const tops=[...document.querySelectorAll('.status .stat .top')];if(tops.length<4)return;
-  tops.forEach(x=>{const sp=x.querySelector('span');if(sp)sp.textContent='…'});
+  /* Prueba 29: mantenemos el valor visible mientras se leen los datos.
+     Así, aunque el navegador repita una carga, nunca aparece el parpadeo número ↔ … */
   try{
     const id=cur.m.sheet;
     const [pj,aj,mj]=await Promise.all([
@@ -458,17 +459,22 @@ function showAlertsPopupP26(){
     renderPopupItems(body,items)};
   jsonpMachineP26('Reparaciones',r=>{rr=r;done()});jsonpMachineP26('Mantenimiento',r=>{mm=r;done()});
 }
+let p29LastLoadedMachine=null;
 function wireP26(){
-  if(!currentMachineP26())return;
+  const curP29=currentMachineP26();if(!curP29)return;
   const cards=[...document.querySelectorAll('.status .stat')];if(cards.length<3)return;
   [[cards[0],'p26r',showRepairPopupP26],[cards[1],'p26m',showMaintenancePopupP26],[cards[2],'p26a',showAlertsPopupP26]].forEach(([c,k,f])=>{
     if(c&&!c.dataset[k]){c.dataset[k]='1';c.classList.add('status-card-clickable');c.addEventListener('click',f)}
   });
-  loadMachineStatusP26();
+  if(p29LastLoadedMachine!==curP29.code){
+    p29LastLoadedMachine=curP29.code;
+    loadMachineStatusP26();
+  }
 }
 let p26Timer=null;
 function scheduleP26(){clearTimeout(p26Timer);p26Timer=setTimeout(wireP26,180)}
-window.addEventListener('hashchange',scheduleP26);window.addEventListener('load',scheduleP26);
+window.addEventListener('hashchange',()=>{p29LastLoadedMachine=null;scheduleP26()});
+window.addEventListener('load',scheduleP26);
 /* Prueba 28: eliminado el MutationObserver de Prueba 26.
    Los contadores se cargan al abrir/cambiar de máquina, evitando el bucle número ↔ … */
 
