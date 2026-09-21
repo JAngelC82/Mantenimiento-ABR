@@ -77,9 +77,6 @@
 .card.traffic-red{border:3px solid #d84a3f!important}
 .card.traffic-yellow{border:3px solid #e2b62f!important}
 .card.traffic-green{border:3px solid #4aa564!important}
-.machine-traffic-red{box-shadow:inset 0 0 0 3px #d84a3f}
-.machine-traffic-yellow{box-shadow:inset 0 0 0 3px #e2b62f}
-.machine-traffic-green{box-shadow:inset 0 0 0 3px #4aa564}
 
 </style>
 <style>
@@ -521,17 +518,8 @@ function gvizP26(sheetId,tab,tq){
 function nP26(j){const c=j.table?.rows?.[0]?.c?.[0];return Number(c?.v??c?.f??0)||0}
 function rowsP26(j){return(j.table?.rows||[]).map(r=>(r.c||[]).map(c=>c?(c.f??c.v??''):''))}
 
-async function paintCurrentMachineTrafficP36(){
-  const cur=currentMachineP26();if(!cur)return;
-  try{
-    const x=await readPendingMachineP33(cur.code,cur.m);
-    const target=document.querySelector('.hero')||document.querySelector('.machine')||document.querySelector('header');
-    if(!target)return;
-    target.classList.remove('machine-traffic-red','machine-traffic-yellow','machine-traffic-green');
-    const c=trafficClassP36(x.repairs,x.maint).replace('traffic-','machine-traffic-');
-    target.classList.add(c);
-  }catch(e){console.warn('Semáforo máquina P36',e)}
-}
+async function paintCurrentMachineTrafficP36(){return;}
+
 
 async function loadMachineStatusP26(){
   const cur=currentMachineP26();if(!cur)return;
@@ -598,7 +586,6 @@ function wireP26(){
   if(p29LastLoadedMachine!==curP29.code){
     p29LastLoadedMachine=curP29.code;
     loadMachineStatusP26();
-    paintCurrentMachineTrafficP36();
   }
 }
 let p26Timer=null;
