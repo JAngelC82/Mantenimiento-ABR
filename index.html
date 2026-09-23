@@ -389,7 +389,7 @@ function home(){
 v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>ABR</h1><p>Mantenimiento · Reparaciones · Repuestos</p></header>
 <main><div class="section" style="padding-left:14px">GESTIÓN DE PLANTA</div><div class="portal-grid">
 <button class="portal-card" onclick="go('mantenimiento')"><span class="portal-ico">${I.tools}</span><span><b>Mantenimiento</b><small>Líneas de producción · máquinas · reparaciones · repuestos</small></span><span class="arr">›</span></button>
-<button class="portal-card inventory" onclick="go('inventario')"><span class="portal-ico">${I.box}</span><span><b>Inventario taller</b><small>Estanterías · gavetas · material de taller</small></span><span class="arr">›</span></button><button class="portal-card" onclick="window.open('https://docs.google.com/spreadsheets/d/1jCKI4oHf9vNOPHE_7pHC8fBMMPgiASR4TXFwQxJXsG0/edit','_blank')"><span class="portal-ico">${I.box}</span><span><b>Proveedores</b><small>Directorio técnico · contactos · suministros</small></span><span class="arr">›</span></button>
+<button class="portal-card inventory" onclick="go('inventario')"><span class="portal-ico">${I.box}</span><span><b>Inventario taller</b><small>Estanterías · gavetas · material de taller</small></span><span class="arr">›</span></button><button class="portal-card" onclick="go('proveedores')"><span class="portal-ico">${I.box}</span><span><b>Proveedores</b><small>Directorio técnico · contactos · suministros</small></span><span class="arr">›</span></button>
 </div></main>`}
 
 function maintenanceHome(){let g={};Object.entries(machines).forEach(([c,m])=>(g[m.line]??=[]).push([c,m]));
@@ -479,7 +479,7 @@ function providerPage(id){let p=providers.find(x=>x.id===id);if(!p)return provid
 function linePage(l){let a=Object.entries(machines).filter(x=>x[1].line===l);v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(l)}</h1><p><span class="line-main-name">${esc(a.length ? a[0][1].lineName : "")}</span></p></header><main><div class="grid"><button class="back" onclick="go('mantenimiento')">‹ Todas las líneas</button>${a.map(([c,m])=>`<button class="card" data-machine="${esc(c)}" onclick="go('maquina=${encodeURIComponent(c)}')"><b>${esc(c)} · ${esc(m.name)}</b><small>${esc(m.lineName)}</small></button>`).join("")}</div></main>`}
 function generalWorkshop(c){let m=machines[c],base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`;v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">00</span></div><div class="machineUpper">TALLER</div></div></div><div class="code">00-000</div><div class="machineName">Mantenimiento general de taller</div><div class="nfc">${I.tools}<span>Averías e instalaciones generales · ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Taller siempre operativo</div></header><main class="content"><button class="back" onclick="go('linea=L%C3%8DNEA%2000')">‹ Volver</button><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>1</span></div><small>Reparación pendiente</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos generales</small></div></div><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="docs"><a class="doc d2" target="_blank" href="${base}#gid=64070560"><span class="ico">${I.tools}</span><span><b>Mantenimiento</b></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b></span><span class="arr">›</span></a></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Taller · Reparaciones generales</div></footer>`}
 function machine(c){let m=machines[c],dfolder=documentationFolders[c]?`https://drive.google.com/drive/folders/${documentationFolders[c]}`:"#",vfolder=videoFolders[c]?`https://drive.google.com/drive/folders/${videoFolders[c]}`:"#",base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`,num=m.line.replace("LÍNEA ","");v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">${esc(num)}</span></div><div class="machineUpper">${esc(m.lineName.toUpperCase())}</div></div></div><div class="code">${esc(c)}</div><div class="machineName">${esc(m.name)}</div><div class="nfc">${I.nfc}<span>Acceso NFC · Mantenimiento ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Siempre en marcha</div></header><main class="content"><button class="back" onclick="go('linea=${encodeURIComponent(m.line)}')">‹ Volver</button><div class="photo"><div><div class="camera">●</div><b>Aquí colocaremos la fotografía<br>real de la máquina</b></div></div><div class="section">ESTADO DE LA MÁQUINA</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>—</span></div><small>Reparaciones pendientes</small></div><div class="stat"><div class="top green">${I.cal}<span>—</span></div><small>Mantenimiento al día</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos activos</small></div><div class="stat"><div class="top navy">${I.clock}</div><small>Última intervención<br><b>—</b></small></div></div><div class="section">DOCUMENTACIÓN Y MANTENIMIENTO</div><div class="docs"><a class="doc d1" target="_blank" href="${dfolder}"><span class="ico">${I.techDoc}</span><span><b>Planos y documentación técnica</b><small>PDF · DXF · fichas · planos</small></span><span class="arr">›</span></a><a class="doc d2" target="_blank" href="${base}#gid=${gids.m}"><span class="ico">${I.tools}</span><span><b>Mantenimientos</b><small>Preventivos y checklists</small></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b><small>Averías y seguimiento</small></span><span class="arr">›</span></a><a class="doc d4" href="#repuestos" onclick="event.preventDefault();showSparePopupP64();return false"><span class="ico">${I.box}</span><span><b>Repuestos</b><small>Stock y referencias</small></span><span class="arr">›</span></a><a class="doc d5" target="_blank" href="${vfolder}"><span class="ico">${I.videoTech}</span><span><b>Manuales audiovisuales</b><small>Vídeos técnicos</small></span><span class="arr">›</span></a><div class="doc d6 history-click" onclick="showHistoryPopupP27()"><span class="ico">${I.bars}</span><span><b>Historial</b><small>Reparaciones realizadas</small></span><span class="arr">›</span></div></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Escanea · Consulta · Mantén</div></footer>`}
-function render(){let h=location.hash.slice(1);if(h==="mantenimiento"){syncAbrDataP42().then(maintenanceHome);return}if(h==="inventario")return inventoryHome();if(h==="proveedores"){syncAbrDataP42().then(providersHome);return}if(h.startsWith("proveedor=")){let id=decodeURIComponent(h.slice(10));syncAbrDataP42().then(()=>providerPage(id));return}if(h.startsWith("maquina=")){let c=decodeURIComponent(h.slice(8)).toUpperCase();syncAbrDataP42().then(()=>machines[c]?(machines[c].general?generalWorkshop(c):machine(c)):maintenanceHome());return}if(h.startsWith("linea=")){let l=decodeURIComponent(h.slice(6));syncAbrDataP42().then(()=>linePage(l));return}home()}window.addEventListener("hashchange",render);render();
+function render(){let h=location.hash.slice(1);if(h==="mantenimiento"){syncAbrDataP42().then(maintenanceHome);return}if(h==="inventario")return inventoryHome();if(h==="proveedores"){suppliersHomeP68();return}if(h.startsWith("proveedor=")){let id=decodeURIComponent(h.slice(10));syncAbrDataP42().then(()=>providerPage(id));return}if(h.startsWith("maquina=")){let c=decodeURIComponent(h.slice(8)).toUpperCase();syncAbrDataP42().then(()=>machines[c]?(machines[c].general?generalWorkshop(c):machine(c)):maintenanceHome());return}if(h.startsWith("linea=")){let l=decodeURIComponent(h.slice(6));syncAbrDataP42().then(()=>linePage(l));return}home()}window.addEventListener("hashchange",render);render();
 
 
 
@@ -829,6 +829,70 @@ function wireGeneralWorkshopP66(){
 window.addEventListener('hashchange',()=>setTimeout(wireGeneralWorkshopP66,350));
 window.addEventListener('load',()=>setTimeout(wireGeneralWorkshopP66,350));
 setTimeout(wireGeneralWorkshopP66,500);
+</script>
+<script id="p67-machine-status-guard">
+function enforceMachineStatusP67(){
+ const cur=currentMachineP26(); if(!cur)return;
+ const cards=[...document.querySelectorAll('.status .stat')];
+ if(cards.length<3)return;
+ const repSmall=cards[0].querySelector('small');
+ const maintSmall=cards[1].querySelector('small');
+ const avisSmall=cards[2].querySelector('small');
+ if(repSmall)repSmall.textContent='Reparaciones pendientes';
+ if(maintSmall)maintSmall.textContent='Mantenimientos vencidos';
+ if(avisSmall)avisSmall.textContent='Avisos activos';
+ // Rewire after every DOM render.
+ cards[0].onclick=e=>{e.preventDefault();e.stopImmediatePropagation();showRepairPopupP26();return false};
+ cards[1].onclick=e=>{e.preventDefault();e.stopImmediatePropagation();showMaintenancePopupP26();return false};
+ cards[2].onclick=e=>{e.preventDefault();e.stopImmediatePropagation();showAlertsPopupP26();return false};
+ loadMachineStatusP26();
+}
+window.addEventListener('hashchange',()=>setTimeout(enforceMachineStatusP67,450));
+window.addEventListener('load',()=>setTimeout(enforceMachineStatusP67,450));
+const obsP67=new MutationObserver(()=>{if(currentMachineP26())setTimeout(enforceMachineStatusP67,80)});
+obsP67.observe(document.getElementById('view')||document.body,{childList:true,subtree:false});
+setTimeout(enforceMachineStatusP67,500);
+</script>
+<script id="p68-suppliers-workshop">
+const SUPPLIERS_SHEET_P68='1jCKI4oHf9vNOPHE_7pHC8fBMMPgiASR4TXFwQxJXsG0';
+async function suppliersHomeP68(){
+ v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>Proveedores</h1><p>Directorio técnico · contactos · suministros</p></header>
+ <main><div class="section">PROVEEDORES</div><div id="supplierBubblesP68" class="spare-list-p61"><div class="rep-empty">Consultando proveedores…</div></div></main>
+ <footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Escanea · Consulta · Mantén</div></footer>`;
+ try{
+  const j=await gvizP26(SUPPLIERS_SHEET_P68,'Proveedores',"select A,B,C,D,E,F,G,H,I,J where B is not null");
+  const rows=rowsP26(j).filter(r=>r[1]&&String(r[1]).trim().toLowerCase()!=='proveedor');
+  document.getElementById('supplierBubblesP68').innerHTML=rows.map((r,i)=>`
+   <div class="spare-pill-p61 ok" style="border-left-color:#0a5790">
+    <div class="spare-head-p61"><span><b>${i+1}. ${escPop(r[1])}</b></span><span class="spare-state-p61 ok">${escPop(r[2]||'Proveedor')}</span></div>
+    <div class="spare-meta-p61" style="display:block;line-height:1.55">
+     <div>📍 <b>Dirección:</b> ${escPop(r[9]||'Pendiente de completar')}</div>
+     <div>✉️ <b>Email:</b> ${escPop(r[7]||'Pendiente de completar')}</div>
+     <div>☎️ <b>Teléfono:</b> ${escPop(r[6]||'Pendiente de completar')}</div>
+     <div>🧰 <b>Especialidad:</b> ${escPop(r[3]||'—')}</div>
+    </div>
+   </div>`).join('')||'<div class="rep-empty">No hay proveedores registrados.</div>';
+ }catch(e){document.getElementById('supplierBubblesP68').innerHTML='<div class="rep-empty">No se pudieron cargar los proveedores.</div>'}
+}
+</script>
+<script id="p68-workshop-fix">
+function wireWorkshopP68(){
+ const q=new URLSearchParams(location.hash.replace(/^#/,''));
+ const code=q.get('maquina');
+ if(!code||!machines[code]?.general)return;
+ const cards=[...document.querySelectorAll('.status .stat')];
+ if(cards.length<2)return;
+ const rep=cards[0],mnt=cards[1];
+ let a=rep.querySelector('small');if(a)a.textContent='Reparaciones pendientes';
+ let b=mnt.querySelector('small');if(b)b.textContent='Mantenimientos vencidos';
+ rep.style.cursor='pointer';mnt.style.cursor='pointer';
+ if(!rep.dataset.p68){rep.dataset.p68='1';rep.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();showGeneralRepairsP66()},true)}
+ if(!mnt.dataset.p68){mnt.dataset.p68='1';mnt.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();showGeneralMaintP66()},true)}
+}
+const obsWorkshopP68=new MutationObserver(()=>setTimeout(wireWorkshopP68,60));
+obsWorkshopP68.observe(document.getElementById('view')||document.body,{childList:true,subtree:true});
+window.addEventListener('hashchange',()=>setTimeout(wireWorkshopP68,250));
+setTimeout(wireWorkshopP68,400);
 </script></body></html>
 <style>
 .card{min-height:92px;padding:18px 20px!important}
