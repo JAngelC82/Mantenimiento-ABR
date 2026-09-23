@@ -478,7 +478,7 @@ function providersHome(){v.innerHTML=`<header class="listhead"><img class="logo"
 function providerPage(id){let p=providers.find(x=>x.id===id);if(!p)return providersHome();let row=(a,b)=>`<div class="row"><span class="lbl">${a}</span>${b||"Pendiente de completar"}</div>`;v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(p.name)}</h1><p>Ficha de proveedor</p></header><main class="provider-detail"><button class="back" onclick="go('proveedores')">‹ Proveedores</button><div class="box"><div style="display:flex;gap:13px;align-items:center"><span class="provider-logo">${esc(p.logo)}</span><h2>${esc(p.name)}</h2></div>${row("Dirección",esc(p.address))}${row("Teléfono",esc(p.phone))}${row("Correo electrónico",p.email?`<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`:"")}${row("Página web",p.web?`<a href="${esc(p.web)}" target="_blank">Abrir web del proveedor</a>`:"")}${row("Máquina / equipo",esc(p.equipment))}${row("Qué nos suministra",esc(p.supply))}${row("Observaciones",esc(p.notes))}</div></main>`}
 function linePage(l){let a=Object.entries(machines).filter(x=>x[1].line===l);v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(l)}</h1><p><span class="line-main-name">${esc(a.length ? a[0][1].lineName : "")}</span></p></header><main><div class="grid"><button class="back" onclick="go('mantenimiento')">‹ Todas las líneas</button>${a.map(([c,m])=>`<button class="card" data-machine="${esc(c)}" onclick="go('maquina=${encodeURIComponent(c)}')"><b>${esc(c)} · ${esc(m.name)}</b><small>${esc(m.lineName)}</small></button>`).join("")}</div></main>`}
 function generalWorkshop(c){let m=machines[c],base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`;v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">00</span></div><div class="machineUpper">TALLER</div></div></div><div class="code">00-000</div><div class="machineName">Mantenimiento general de taller</div><div class="nfc">${I.tools}<span>Averías e instalaciones generales · ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Taller siempre operativo</div></header><main class="content"><button class="back" onclick="go('linea=L%C3%8DNEA%2000')">‹ Volver</button><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>1</span></div><small>Reparación pendiente</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos generales</small></div></div><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="docs"><a class="doc d2" target="_blank" href="${base}#gid=64070560"><span class="ico">${I.tools}</span><span><b>Mantenimiento</b></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b></span><span class="arr">›</span></a></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Taller · Reparaciones generales</div></footer>`}
-function machine(c){let m=machines[c],dfolder=documentationFolders[c]?`https://drive.google.com/drive/folders/${documentationFolders[c]}`:"#",vfolder=videoFolders[c]?`https://drive.google.com/drive/folders/${videoFolders[c]}`:"#",base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`,num=m.line.replace("LÍNEA ","");v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">${esc(num)}</span></div><div class="machineUpper">${esc(m.lineName.toUpperCase())}</div></div></div><div class="code">${esc(c)}</div><div class="machineName">${esc(m.name)}</div><div class="nfc">${I.nfc}<span>Acceso NFC · Mantenimiento ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Siempre en marcha</div></header><main class="content"><button class="back" onclick="go('linea=${encodeURIComponent(m.line)}')">‹ Volver</button><div class="photo"><div><div class="camera">●</div><b>Aquí colocaremos la fotografía<br>real de la máquina</b></div></div><div class="section">ESTADO DE LA MÁQUINA</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>—</span></div><small>Reparaciones pendientes</small></div><div class="stat"><div class="top green">${I.cal}<span>—</span></div><small>Mantenimiento al día</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos activos</small></div><div class="stat"><div class="top navy">${I.clock}</div><small>Última intervención<br><b>—</b></small></div></div><div class="section">DOCUMENTACIÓN Y MANTENIMIENTO</div><div class="docs"><a class="doc d1" target="_blank" href="${dfolder}"><span class="ico">${I.techDoc}</span><span><b>Planos y documentación técnica</b><small>PDF · DXF · fichas · planos</small></span><span class="arr">›</span></a><a class="doc d2" target="_blank" href="${base}#gid=${gids.m}"><span class="ico">${I.tools}</span><span><b>Mantenimientos</b><small>Preventivos y checklists</small></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b><small>Averías y seguimiento</small></span><span class="arr">›</span></a><a class="doc d4" target="_blank" href="${base}#gid=${gids.s}"><span class="ico">${I.box}</span><span><b>Repuestos</b><small>Stock y referencias</small></span><span class="arr">›</span></a><a class="doc d5" target="_blank" href="${vfolder}"><span class="ico">${I.videoTech}</span><span><b>Manuales audiovisuales</b><small>Vídeos técnicos</small></span><span class="arr">›</span></a><div class="doc d6 history-click" onclick="showHistoryPopupP27()"><span class="ico">${I.bars}</span><span><b>Historial</b><small>Reparaciones realizadas</small></span><span class="arr">›</span></div></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Escanea · Consulta · Mantén</div></footer>`}
+function machine(c){let m=machines[c],dfolder=documentationFolders[c]?`https://drive.google.com/drive/folders/${documentationFolders[c]}`:"#",vfolder=videoFolders[c]?`https://drive.google.com/drive/folders/${videoFolders[c]}`:"#",base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`,num=m.line.replace("LÍNEA ","");v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">${esc(num)}</span></div><div class="machineUpper">${esc(m.lineName.toUpperCase())}</div></div></div><div class="code">${esc(c)}</div><div class="machineName">${esc(m.name)}</div><div class="nfc">${I.nfc}<span>Acceso NFC · Mantenimiento ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Siempre en marcha</div></header><main class="content"><button class="back" onclick="go('linea=${encodeURIComponent(m.line)}')">‹ Volver</button><div class="photo"><div><div class="camera">●</div><b>Aquí colocaremos la fotografía<br>real de la máquina</b></div></div><div class="section">ESTADO DE LA MÁQUINA</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>—</span></div><small>Reparaciones pendientes</small></div><div class="stat"><div class="top green">${I.cal}<span>—</span></div><small>Mantenimiento al día</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos activos</small></div><div class="stat"><div class="top navy">${I.clock}</div><small>Última intervención<br><b>—</b></small></div></div><div class="section">DOCUMENTACIÓN Y MANTENIMIENTO</div><div class="docs"><a class="doc d1" target="_blank" href="${dfolder}"><span class="ico">${I.techDoc}</span><span><b>Planos y documentación técnica</b><small>PDF · DXF · fichas · planos</small></span><span class="arr">›</span></a><a class="doc d2" target="_blank" href="${base}#gid=${gids.m}"><span class="ico">${I.tools}</span><span><b>Mantenimientos</b><small>Preventivos y checklists</small></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b><small>Averías y seguimiento</small></span><span class="arr">›</span></a><a class="doc d4" href="#repuestos" onclick="event.preventDefault();showSparePopupP64();return false"><span class="ico">${I.box}</span><span><b>Repuestos</b><small>Stock y referencias</small></span><span class="arr">›</span></a><a class="doc d5" target="_blank" href="${vfolder}"><span class="ico">${I.videoTech}</span><span><b>Manuales audiovisuales</b><small>Vídeos técnicos</small></span><span class="arr">›</span></a><div class="doc d6 history-click" onclick="showHistoryPopupP27()"><span class="ico">${I.bars}</span><span><b>Historial</b><small>Reparaciones realizadas</small></span><span class="arr">›</span></div></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Escanea · Consulta · Mantén</div></footer>`}
 function render(){let h=location.hash.slice(1);if(h==="mantenimiento"){syncAbrDataP42().then(maintenanceHome);return}if(h==="inventario")return inventoryHome();if(h==="proveedores"){syncAbrDataP42().then(providersHome);return}if(h.startsWith("proveedor=")){let id=decodeURIComponent(h.slice(10));syncAbrDataP42().then(()=>providerPage(id));return}if(h.startsWith("maquina=")){let c=decodeURIComponent(h.slice(8)).toUpperCase();syncAbrDataP42().then(()=>machines[c]?(machines[c].general?generalWorkshop(c):machine(c)):maintenanceHome());return}if(h.startsWith("linea=")){let l=decodeURIComponent(h.slice(6));syncAbrDataP42().then(()=>linePage(l));return}home()}window.addEventListener("hashchange",render);render();
 
 
@@ -658,27 +658,46 @@ function rowsP26(j){return(j.table?.rows||[]).map(r=>(r.c||[]).map(c=>c?(c.f??c.
 async function paintCurrentMachineTrafficP36(){return;}
 
 
+function todayP64(){const d=new Date();d.setHours(0,0,0,0);return d}
+function overdueRepairP64(r){
+  if(!r||!r[0])return false;
+  const repaired=String(r[4]??'').trim().toLowerCase();
+  if(['sí','si','true','verdadero'].includes(repaired))return false;
+  const d=dateES(r[3]); if(d){d.setHours(0,0,0,0);return d<todayP64()}
+  return String(r[5]||'').toUpperCase().includes('VENC');
+}
+function overdueMaintenanceP64(r){
+  if(!r||!r[0])return false;
+  const d=dateES(r[5]); if(d){d.setHours(0,0,0,0);return d<todayP64()}
+  return String(r[7]||'').toUpperCase().includes('VENC');
+}
+function spareOrderP64(r){
+  if(!r||!r[0]||String(r[0]).trim().toLowerCase()==='pieza / repuesto')return false;
+  const stock=Number(String(r[1]??0).replace(',','.'))||0;
+  const min=Number(String(r[2]??0).replace(',','.'))||0;
+  return stock<=min;
+}
 async function loadMachineStatusP26(){
   const cur=currentMachineP26();if(!cur)return;
   const tops=[...document.querySelectorAll('.status .stat .top')];if(tops.length<4)return;
   try{
-    const id=cur.m.sheet;
-    const [rj,mj]=await Promise.all([
-      gvizP26(id,'Reparaciones',"select A,B,C,D,E,F,G where A is not null"),
-      gvizP26(id,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null")
+    const [rj,mj,sj]=await Promise.all([
+      gvizP26(cur.m.sheet,'Reparaciones',"select A,B,C,D,E,F,G where A is not null"),
+      gvizP26(cur.m.sheet,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null"),
+      gvizP26(cur.m.sheet,'Repuestos',"select A,B,C,D,E,F where A is not null")
     ]);
-    const rr=rowsP26(rj), mr=rowsP26(mj);
-    const activeRepairs=rr.filter(r=>r[0]&&!['sí','si'].includes(String(r[4]||'').trim().toLowerCase()));
-    const activeMaint=mr.filter(r=>r[0]);
-    const repairAlerts=activeRepairs.filter(r=>repairColor(r)!=='rep-green');
-    const maintenanceAlerts=activeMaint.filter(r=>maintenanceColor(r)!=='rep-green');
-    const dates=activeMaint.map(r=>dateES(r[4])).filter(Boolean).sort((a,b)=>b-a);
-    const vals=[String(activeRepairs.length),String(activeMaint.length),String(repairAlerts.length+maintenanceAlerts.length),dates[0]?dates[0].toLocaleDateString('es-ES'):'—'];
+    const rr=rowsP26(rj).filter(overdueRepairP64);
+    const mm=rowsP26(mj).filter(overdueMaintenanceP64);
+    const ss=rowsP26(sj).filter(spareOrderP64);
+    const allM=rowsP26(mj).filter(r=>r[0]);
+    const dates=allM.map(r=>dateES(r[4])).filter(Boolean).sort((a,b)=>b-a);
+    const vals=[String(rr.length),String(mm.length),String(rr.length+mm.length+ss.length),dates[0]?dates[0].toLocaleDateString('es-ES'):'—'];
     tops.forEach((x,i)=>{const sp=x.querySelector('span');if(sp)sp.textContent=vals[i]});
-  }catch(e){
-    tops.forEach(x=>{const sp=x.querySelector('span');if(sp)sp.textContent='!'});
-    console.warn('Estado dinámico P26',cur.code,e);
-  }
+    const cards=[...document.querySelectorAll('.status .stat')];
+    if(cards[0]?.querySelector('small'))cards[0].querySelector('small').textContent='Reparaciones vencidas';
+    if(cards[1]?.querySelector('small'))cards[1].querySelector('small').textContent='Mantenimientos vencidos';
+    if(cards[2]?.querySelector('small'))cards[2].querySelector('small').textContent='Avisos activos';
+  }catch(e){tops.forEach(x=>{const sp=x.querySelector('span');if(sp)sp.textContent='!'});console.warn('Estado P64',e)}
 }
 function jsonpMachineP26(tab,callback){
   const cur=currentMachineP26();if(!cur)return;
@@ -690,28 +709,41 @@ function jsonpMachineP26(tab,callback){
   document.body.appendChild(sc);
 }
 function showRepairPopupP26(){
-  const body=popupShell('Reparaciones pendientes');
+  const body=popupShell('Reparaciones vencidas');
   jsonpMachineP26('Reparaciones',rows=>{
-    const a=rows.filter(r=>r[0]&&!['sí','si'].includes(String(r[4]||'').toLowerCase()));
-    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item ${repairColor(r)}"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+    const a=rows.filter(overdueRepairP64);
+    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
   });
 }
 function showMaintenancePopupP26(){
-  const body=popupShell('Mantenimientos');
+  const body=popupShell('Mantenimientos vencidos');
   jsonpMachineP26('Mantenimiento',rows=>{
-    const a=rows.filter(r=>r[0]);
-    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item ${maintenanceColor(r)}"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+    const a=rows.filter(overdueMaintenanceP64);
+    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`));
   });
 }
 function showAlertsPopupP26(){
-  const body=popupShell('Avisos activos');let rr=null,mm=null;
-  const done=()=>{if(rr===null||mm===null)return;const items=[];
-    rr.filter(r=>r[0]&&!['sí','si'].includes(String(r[4]||'').toLowerCase())&&repairColor(r)!=='rep-green')
-      .forEach(r=>items.push(`<div class="rep-item ${repairColor(r)}"><strong>Reparación: ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
-    mm.filter(r=>r[0]&&maintenanceColor(r)!=='rep-green')
-      .forEach(r=>items.push(`<div class="rep-item ${maintenanceColor(r)}"><strong>Mantenimiento: ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+  const body=popupShell('Avisos activos');let rr=null,mm=null,ss=null;
+  const done=()=>{if(rr===null||mm===null||ss===null)return;const items=[];
+    rr.filter(overdueRepairP64).forEach((r,i)=>items.push(`<div class="rep-item rep-red"><strong>🔧 Reparación · ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+    mm.filter(overdueMaintenanceP64).forEach((r,i)=>items.push(`<div class="rep-item rep-red"><strong>🛠 Mantenimiento · ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+    ss.filter(spareOrderP64).forEach((r,i)=>items.push(`<div class="spare-pill-p61 order"><div class="spare-head-p61"><span>📦 ${escPop(r[0])}</span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61"><span>Stock: <b>${escPop(r[1]??0)}</b></span><span>Mínimo: <b>${escPop(r[2]??0)}</b></span></div></div>`));
     renderPopupItems(body,items)};
-  jsonpMachineP26('Reparaciones',r=>{rr=r;done()});jsonpMachineP26('Mantenimiento',r=>{mm=r;done()});
+  jsonpMachineP26('Reparaciones',r=>{rr=r;done()});
+  jsonpMachineP26('Mantenimiento',r=>{mm=r;done()});
+  jsonpMachineP26('Repuestos',r=>{ss=r;done()});
+}
+function showSparePopupP64(){
+  const cur=currentMachineP26();if(!cur)return;
+  const body=popupShell('Repuestos · '+cur.code);
+  jsonpMachineP26('Repuestos',rows=>{
+    const a=rows.filter(r=>r[0]&&String(r[0]).trim().toLowerCase()!=='pieza / repuesto');
+    const items=a.map((r,i)=>{
+      const pedir=spareOrderP64(r);
+      return `<div class="spare-pill-p61 ${pedir?'order':'ok'}"><div class="spare-head-p61"><span><b>${i+1}.</b> 📦 ${escPop(r[0])}</span><span class="spare-state-p61 ${pedir?'order':'ok'}">${pedir?'PEDIR':'OK'}</span></div><div class="spare-meta-p61"><span>Stock actual: <b>${escPop(r[1]??0)}</b></span><span>Stock mínimo: <b>${escPop(r[2]??0)}</b></span>${r[4]?`<span>Ubicación: ${escPop(r[4])}</span>`:''}</div></div>`;
+    });
+    body.innerHTML=items.length?`<div class="spare-list-p61">${items.join('')}</div>`:'<div class="rep-empty">No hay repuestos registrados.</div>';
+  });
 }
 let p29LastLoadedMachine=null;
 function wireP26(){
@@ -720,10 +752,8 @@ function wireP26(){
   [[cards[0],'p26r',showRepairPopupP26],[cards[1],'p26m',showMaintenancePopupP26],[cards[2],'p26a',showAlertsPopupP26]].forEach(([c,k,f])=>{
     if(c&&!c.dataset[k]){c.dataset[k]='1';c.classList.add('status-card-clickable');c.addEventListener('click',f)}
   });
-  if(p29LastLoadedMachine!==curP29.code){
-    p29LastLoadedMachine=curP29.code;
-    loadMachineStatusP26();
-  }
+  p29LastLoadedMachine=curP29.code;
+  loadMachineStatusP26();
 }
 let p26Timer=null;
 function scheduleP26(){clearTimeout(p26Timer);p26Timer=setTimeout(wireP26,180)}
@@ -751,127 +781,7 @@ async function showHistoryPopupP27(){
 }
 </script>
 
-<script id="p63-status-controller">
-/* PRUEBA 63 — estado coherente:
-   1 Reparaciones = SOLO vencidas y no reparadas (fecha máxima D)
-   2 Mantenimientos = SOLO vencidos (próxima fecha F)
-   3 Avisos = suma de reparaciones vencidas + mantenimientos vencidos + repuestos a pedir
-   Repuestos = stock actual B <= stock mínimo C
-*/
-function todayP63(){const d=new Date();d.setHours(0,0,0,0);return d}
-function overdueRepairP63(r){
-  if(!r||!r[0]||['sí','si'].includes(String(r[4]||'').trim().toLowerCase()))return false;
-  const d=dateES(r[3]); if(d){d.setHours(0,0,0,0);return d<todayP63()}
-  return String(r[5]||'').toUpperCase().includes('VENC');
-}
-function overdueMaintenanceP63(r){
-  if(!r||!r[0])return false;
-  const d=dateES(r[5]); if(d){d.setHours(0,0,0,0);return d<todayP63()}
-  return String(r[7]||'').toUpperCase().includes('VENC');
-}
-function spareToOrderP63(r){
-  if(!r||!r[0]||String(r[0]).trim().toLowerCase()==='pieza / repuesto')return false;
-  const stock=Number(String(r[1]??0).replace(',','.'))||0;
-  const min=Number(String(r[2]??0).replace(',','.'))||0;
-  return stock<=min;
-}
-async function dataP63(){
-  const cur=currentMachineP26(); if(!cur)throw Error('Máquina no encontrada');
-  const [rj,mj,sj]=await Promise.all([
-    gvizP26(cur.m.sheet,'Reparaciones',"select A,B,C,D,E,F,G where A is not null"),
-    gvizP26(cur.m.sheet,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null"),
-    gvizP26(cur.m.sheet,'Repuestos',"select A,B,C,D,E,F where A is not null")
-  ]);
-  const repairs=rowsP26(rj).filter(overdueRepairP63);
-  const maint=rowsP26(mj).filter(overdueMaintenanceP63);
-  const spares=rowsP26(sj).filter(spareToOrderP63);
-  return {cur,repairs,maint,spares,allMaint:rowsP26(mj).filter(r=>r[0])};
-}
-function repairHtmlP63(r,i,label=''){
- return `<div class="rep-item rep-red"><strong>${label}${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[3]?`<span style="margin-top:6px"><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`;
-}
-function maintHtmlP63(r,i,label=''){
- return `<div class="rep-item rep-red"><strong>${label}${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[5]?`<span style="margin-top:6px"><b>Fecha prevista:</b> ${escPop(r[5])}</span>`:''}</div>`;
-}
-function spareHtmlP63(r,i,label=''){
- const stock=r[1]??0,min=r[2]??0;
- return `<div class="spare-pill-p61 order"><div class="spare-head-p61"><span>${label}<b>${i+1}.</b> 📦 ${escPop(r[0])}</span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61"><span>Stock actual: <b>${escPop(stock)}</b></span><span>Stock mínimo: <b>${escPop(min)}</b></span>${r[4]?`<span>Ubicación: ${escPop(r[4])}</span>`:''}</div></div>`;
-}
-async function showRepairPopupP63(){
- const body=popupShell('Reparaciones vencidas');body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{const d=await dataP63();renderPopupItems(body,d.repairs.map((r,i)=>repairHtmlP63(r,i)));}
- catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar las reparaciones.</div>'}
-}
-async function showMaintenancePopupP63(){
- const body=popupShell('Mantenimientos vencidos');body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{const d=await dataP63();renderPopupItems(body,d.maint.map((r,i)=>maintHtmlP63(r,i)));}
- catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los mantenimientos.</div>'}
-}
-async function showAlertsPopupP63(){
- const body=popupShell('Avisos activos');body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{
-  const d=await dataP63(),items=[];
-  d.repairs.forEach((r,i)=>items.push(repairHtmlP63(r,i,'🔧 Reparación · ')));
-  d.maint.forEach((r,i)=>items.push(maintHtmlP63(r,i,'🛠 Mantenimiento · ')));
-  d.spares.forEach((r,i)=>items.push(spareHtmlP63(r,i,'Repuesto · ')));
-  renderPopupItems(body,items);
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los avisos.</div>'}
-}
-async function showSparePopupP63(){
- const cur=currentMachineP26();if(!cur)return;
- const body=popupShell('Repuestos · '+cur.code);body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{
-  const j=await gvizP26(cur.m.sheet,'Repuestos',"select A,B,C,D,E,F where A is not null");
-  const rows=rowsP26(j).filter(r=>r[0]&&String(r[0]).trim().toLowerCase()!=='pieza / repuesto');
-  const items=rows.map((r,i)=>{
-    const pedir=spareToOrderP63(r),stock=r[1]??0,min=r[2]??0;
-    return `<div class="spare-pill-p61 ${pedir?'order':'ok'}"><div class="spare-head-p61"><span><b>${i+1}.</b> 📦 ${escPop(r[0])}</span><span class="spare-state-p61 ${pedir?'order':'ok'}">${pedir?'PEDIR':'OK'}</span></div><div class="spare-meta-p61"><span>Stock actual: <b>${escPop(stock)}</b></span><span>Stock mínimo: <b>${escPop(min)}</b></span>${r[4]?`<span>Ubicación: ${escPop(r[4])}</span>`:''}</div></div>`;
-  });
-  body.innerHTML=items.length?`<div class="spare-list-p61">${items.join('')}</div>`:'<div class="rep-empty">No hay repuestos registrados.</div>';
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los repuestos.</div>'}
-}
-async function loadStatusP63(){
- const cur=currentMachineP26();if(!cur)return;
- const cards=[...document.querySelectorAll('.status .stat')];if(cards.length<3)return;
- const spans=cards.slice(0,3).map(c=>c.querySelector('.top span'));spans.forEach(s=>{if(s)s.textContent='…'});
- try{
-  const d=await dataP63();
-  if(spans[0])spans[0].textContent=String(d.repairs.length);
-  if(spans[1])spans[1].textContent=String(d.maint.length);
-  if(spans[2])spans[2].textContent=String(d.repairs.length+d.maint.length+d.spares.length);
-  const smalls=cards.slice(0,3).map(c=>c.querySelector('small'));
-  if(smalls[0])smalls[0].textContent='Reparaciones vencidas';
-  if(smalls[1])smalls[1].textContent='Mantenimientos vencidos';
-  if(smalls[2])smalls[2].textContent='Avisos activos';
- }catch(e){spans.forEach(s=>{if(s)s.textContent='!'})}
-}
-function wireP63(){
- const cur=currentMachineP26();if(!cur)return;
- const cards=[...document.querySelectorAll('.status .stat')];
- if(cards.length>=3){
-  // onclick property deliberately replaces old listeners' practical behavior by stopping propagation.
-  const fns=[showRepairPopupP63,showMaintenancePopupP63,showAlertsPopupP63];
-  cards.slice(0,3).forEach((c,i)=>{
-   c.classList.add('status-card-clickable');
-   c.onclick=function(e){e.preventDefault();e.stopImmediatePropagation();fns[i]();return false};
-  });
- }
- // Real Repuestos button: d4 (middle-right in 2-column grid).
- const spare=document.querySelector('.docs .doc.d4');
- if(spare){
-  spare.removeAttribute('target');spare.href='#repuestos';
-  spare.onclick=function(e){e.preventDefault();e.stopImmediatePropagation();showSparePopupP63();return false};
- }
- loadStatusP63();
-}
-const renderBaseP63=render;
-function scheduleP63(){setTimeout(wireP63,300)}
-window.addEventListener('hashchange',scheduleP63);
-window.addEventListener('load',scheduleP63);
-const obsP63=new MutationObserver(()=>{if(currentMachineP26())scheduleP63()});
-obsP63.observe(document.body,{childList:true,subtree:false});
-setTimeout(wireP63,400);
-</script></body></html>
+</body></html>
 <style>
 .card{min-height:92px;padding:18px 20px!important}
 .card .linepic,.card .linepicfade,.card .lineico{display:none!important}
