@@ -751,38 +751,77 @@ async function showHistoryPopupP27(){
 }
 </script>
 
-<script id="p61-spares">
-async function showSparePopupP61(){
+<script id="p62-spares">
+async function showSparePopupP62(){
  const cur=currentMachineP26();if(!cur)return;
  try{
   const j=await gvizP26(cur.m.sheet,'Repuestos',"select A,B,C,D,E,F where A is not null");
-  const rows=rowsP26(j).filter(r=>r[0]&&String(r[0]).toLowerCase()!=='pieza / repuesto');
-  const body=rows.length?'<div class="spare-list-p61">'+rows.map(r=>{
-   const stock=Number(String(r[1]??0).replace(',','.'))||0,min=Number(String(r[2]??0).replace(',','.'))||0,pedir=stock<=min;
-   return `<div class="spare-pill-p61 ${pedir?'order':'ok'}"><div class="spare-head-p61"><span>📦 ${escP26(r[0])}</span><span class="spare-state-p61 ${pedir?'order':'ok'}">${pedir?'PEDIR':'OK'}</span></div><div class="spare-meta-p61"><span>Stock: <b>${escP26(r[1]??'0')}</b></span><span>Mínimo: <b>${escP26(r[2]??'0')}</b></span>${r[4]?`<span>Ubicación: ${escP26(r[4])}</span>`:''}</div></div>`;
+  const rows=rowsP26(j).filter(r=>r[0]&&String(r[0]).trim().toLowerCase()!=='pieza / repuesto');
+  const body=rows.length?'<div class="spare-list-p61">'+rows.map((r,i)=>{
+   const stock=Number(String(r[1]??0).replace(',','.'))||0;
+   const min=Number(String(r[2]??0).replace(',','.'))||0;
+   const pedir=stock<=min;
+   return `<div class="spare-pill-p61 ${pedir?'order':'ok'}">
+    <div class="spare-head-p61"><span><b>${i+1}.</b> 📦 ${escP26(r[0])}</span><span class="spare-state-p61 ${pedir?'order':'ok'}">${pedir?'PEDIR':'OK'}</span></div>
+    <div class="spare-meta-p61"><span>Stock actual: <b>${escP26(r[1]??'0')}</b></span><span>Stock mínimo: <b>${escP26(r[2]??'0')}</b></span>${r[4]?`<span>Ubicación: ${escP26(r[4])}</span>`:''}</div>
+   </div>`;
   }).join('')+'</div>':'<div class="emptyP26">No hay repuestos registrados.</div>';
   openPopupP26('Repuestos · '+cur.code,body);
  }catch(e){openPopupP26('Repuestos','No se pudieron cargar los repuestos.');}
 }
-async function spareAlertsP61(id){
- try{const j=await gvizP26(id,'Repuestos',"select A,B,C,D,E,F where A is not null");return rowsP26(j).filter(r=>r[0]&&String(r[0]).toLowerCase()!=='pieza / repuesto').filter(r=>(Number(String(r[1]??0).replace(',','.'))||0)<=(Number(String(r[2]??0).replace(',','.'))||0));}catch(e){return []}
+async function spareAlertsP62(id){
+ try{
+  const j=await gvizP26(id,'Repuestos',"select A,B,C,D,E,F where A is not null");
+  return rowsP26(j).filter(r=>r[0]&&String(r[0]).trim().toLowerCase()!=='pieza / repuesto').filter(r=>{
+   const stock=Number(String(r[1]??0).replace(',','.'))||0,min=Number(String(r[2]??0).replace(',','.'))||0;
+   return stock<=min;
+  });
+ }catch(e){return []}
 }
-const showAlertsPopupP26_original_p61=showAlertsPopupP26;
+const showAlertsPopupP26_base62=showAlertsPopupP26;
 showAlertsPopupP26=async function(){
  const cur=currentMachineP26();if(!cur)return;
  try{
-  const [rj,mj,sp]=await Promise.all([gvizP26(cur.m.sheet,'Reparaciones',"select A,B,C,D,E,F,G where A is not null"),gvizP26(cur.m.sheet,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null"),spareAlertsP61(cur.m.sheet)]);
+  const [rj,mj,sp]=await Promise.all([
+   gvizP26(cur.m.sheet,'Reparaciones',"select A,B,C,D,E,F,G where A is not null"),
+   gvizP26(cur.m.sheet,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null"),
+   spareAlertsP62(cur.m.sheet)
+  ]);
   const rr=rowsP26(rj).filter(r=>r[0]&&!['sí','si'].includes(String(r[4]||'').trim().toLowerCase())).filter(r=>repairColor(r)!=='rep-green');
   const mr=rowsP26(mj).filter(r=>r[0]).filter(r=>maintenanceColor(r)!=='rep-green');
   let parts=[];rr.forEach(r=>parts.push(repairRowHtmlP26(r)));mr.forEach(r=>parts.push(maintenanceRowHtmlP26(r)));
-  sp.forEach(r=>parts.push(`<div class="spare-pill-p61 order"><div class="spare-head-p61"><span>📦 ${escP26(r[0])}</span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61"><span>Stock: <b>${escP26(r[1]??'0')}</b></span><span>Mínimo: <b>${escP26(r[2]??'0')}</b></span></div></div>`));
+  sp.forEach((r,i)=>parts.push(`<div class="spare-pill-p61 order"><div class="spare-head-p61"><span>📦 ${escP26(r[0])}</span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61"><span>Stock actual: <b>${escP26(r[1]??'0')}</b></span><span>Stock mínimo: <b>${escP26(r[2]??'0')}</b></span></div></div>`));
   openPopupP26('Avisos · '+cur.code,parts.length?'<div class="spare-list-p61">'+parts.join('')+'</div>':'<div class="emptyP26">No hay avisos pendientes.</div>');
  }catch(e){openPopupP26('Avisos','No se pudieron cargar los avisos.');}
 };
-const loadMachineStatusP26_original_p61=loadMachineStatusP26;
-loadMachineStatusP26=async function(){await loadMachineStatusP26_original_p61();const cur=currentMachineP26();if(!cur)return;try{const sp=await spareAlertsP61(cur.m.sheet),tops=[...document.querySelectorAll('.status .stat .top')];if(tops.length>=3){const el=tops[2].querySelector('span');if(el)el.textContent=String((parseInt(el.textContent,10)||0)+sp.length);}}catch(e){}};
-function wireSparesP61(){document.querySelectorAll('.doc').forEach(a=>{if((a.textContent||'').toLowerCase().includes('repuestos')){a.removeAttribute('target');a.href='#';a.onclick=e=>{e.preventDefault();showSparePopupP61();};}})}
-const wireP26_original_p61=wireP26;wireP26=function(){wireP26_original_p61();wireSparesP61();};setTimeout(wireSparesP61,250);
+const loadMachineStatusP26_base62=loadMachineStatusP26;
+loadMachineStatusP26=async function(){
+ await loadMachineStatusP26_base62();
+ const cur=currentMachineP26();if(!cur)return;
+ try{
+  const sp=await spareAlertsP62(cur.m.sheet),tops=[...document.querySelectorAll('.status .stat .top')];
+  if(tops.length>=3){const el=tops[2].querySelector('span');if(el)el.textContent=String((parseInt(el.textContent,10)||0)+sp.length);}
+ }catch(e){}
+};
+function wireSparesP62(){
+ const cur=currentMachineP26();if(!cur)return;
+ // El botón real es el tercer icono de documentación (centro-derecha): Repuestos.
+ const docs=[...document.querySelectorAll('.docs .doc')];
+ let btn=docs.find(a=>{
+   const t=(a.textContent||'').toLowerCase();
+   return t.includes('repuesto')||t.includes('stock');
+ });
+ // Respaldo por posición: 3er botón de la rejilla de seis.
+ if(!btn && docs.length>=3) btn=docs[2];
+ if(btn){
+   btn.removeAttribute('target');
+   btn.setAttribute('href','#repuestos');
+   btn.onclick=function(e){e.preventDefault();e.stopPropagation();showSparePopupP62();return false;};
+ }
+}
+const wireP26_base62=wireP26;
+wireP26=function(){wireP26_base62();setTimeout(wireSparesP62,0);};
+setTimeout(wireSparesP62,200);
 </script></body></html>
 <style>
 .card{min-height:92px;padding:18px 20px!important}
