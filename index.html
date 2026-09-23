@@ -659,6 +659,13 @@ async function paintCurrentMachineTrafficP36(){return;}
 
 
 function todayP64(){const d=new Date();d.setHours(0,0,0,0);return d}
+
+function activeRepairP65(r){
+  if(!r||!r[0])return false;
+  const repaired=String(r[4]??'').trim().toLowerCase();
+  return !['sí','si','true','verdadero'].includes(repaired);
+}
+
 function overdueRepairP64(r){
   if(!r||!r[0])return false;
   const repaired=String(r[4]??'').trim().toLowerCase();
@@ -686,15 +693,16 @@ async function loadMachineStatusP26(){
       gvizP26(cur.m.sheet,'Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null"),
       gvizP26(cur.m.sheet,'Repuestos',"select A,B,C,D,E,F where A is not null")
     ]);
-    const rr=rowsP26(rj).filter(overdueRepairP64);
+    const allRepairs=rowsP26(rj).filter(activeRepairP65);
+    const overdueRepairs=rowsP26(rj).filter(overdueRepairP64);
     const mm=rowsP26(mj).filter(overdueMaintenanceP64);
     const ss=rowsP26(sj).filter(spareOrderP64);
     const allM=rowsP26(mj).filter(r=>r[0]);
     const dates=allM.map(r=>dateES(r[4])).filter(Boolean).sort((a,b)=>b-a);
-    const vals=[String(rr.length),String(mm.length),String(rr.length+mm.length+ss.length),dates[0]?dates[0].toLocaleDateString('es-ES'):'—'];
+    const vals=[String(allRepairs.length),String(mm.length),String(allRepairs.length+mm.length+ss.length),dates[0]?dates[0].toLocaleDateString('es-ES'):'—'];
     tops.forEach((x,i)=>{const sp=x.querySelector('span');if(sp)sp.textContent=vals[i]});
     const cards=[...document.querySelectorAll('.status .stat')];
-    if(cards[0]?.querySelector('small'))cards[0].querySelector('small').textContent='Reparaciones vencidas';
+    if(cards[0]?.querySelector('small'))cards[0].querySelector('small').textContent='Reparaciones pendientes';
     if(cards[1]?.querySelector('small'))cards[1].querySelector('small').textContent='Mantenimientos vencidos';
     if(cards[2]?.querySelector('small'))cards[2].querySelector('small').textContent='Avisos activos';
   }catch(e){tops.forEach(x=>{const sp=x.querySelector('span');if(sp)sp.textContent='!'});console.warn('Estado P64',e)}
@@ -709,10 +717,10 @@ function jsonpMachineP26(tab,callback){
   document.body.appendChild(sc);
 }
 function showRepairPopupP26(){
-  const body=popupShell('Reparaciones vencidas');
+  const body=popupShell('Reparaciones pendientes');
   jsonpMachineP26('Reparaciones',rows=>{
-    const a=rows.filter(overdueRepairP64);
-    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
+    const a=rows.filter(activeRepairP65);
+    renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span><span style="margin-top:6px"><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
   });
 }
 function showMaintenancePopupP26(){
@@ -725,7 +733,7 @@ function showMaintenancePopupP26(){
 function showAlertsPopupP26(){
   const body=popupShell('Avisos activos');let rr=null,mm=null,ss=null;
   const done=()=>{if(rr===null||mm===null||ss===null)return;const items=[];
-    rr.filter(overdueRepairP64).forEach((r,i)=>items.push(`<div class="rep-item rep-red"><strong>🔧 Reparación · ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
+    rr.filter(activeRepairP65).forEach((r,i)=>items.push(`<div class="rep-item rep-red"><strong>🔧 Reparación · ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span></div>`));
     mm.filter(overdueMaintenanceP64).forEach((r,i)=>items.push(`<div class="rep-item rep-red"><strong>🛠 Mantenimiento · ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span></div>`));
     ss.filter(spareOrderP64).forEach((r,i)=>items.push(`<div class="spare-pill-p61 order"><div class="spare-head-p61"><span>📦 ${escPop(r[0])}</span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61"><span>Stock: <b>${escPop(r[1]??0)}</b></span><span>Mínimo: <b>${escPop(r[2]??0)}</b></span></div></div>`));
     renderPopupItems(body,items)};
@@ -781,7 +789,47 @@ async function showHistoryPopupP27(){
 }
 </script>
 
-</body></html>
+
+<script id="p66-general-workshop">
+async function showGeneralRepairsP66(){
+ const body=popupShell('Reparaciones pendientes · Taller general');
+ body.innerHTML='<div class="rep-empty">Consultando máquinas…</div>';
+ try{
+  const results=await collectGlobalPendingP33(),items=[];
+  results.sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code))
+   .forEach(x=>(x.repairs||[]).filter(activeRepairP65).forEach(r=>items.push(
+    `<div class="rep-item rep-red"><strong>${escPop(x.code)} · ${escPop(x.m.name)}</strong><span>${escPop(r[0]||'Reparación pendiente')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span></div>`)));
+  renderPopupItems(body,items);
+ }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar las reparaciones.</div>'}
+}
+async function showGeneralMaintP66(){
+ const body=popupShell('Mantenimientos vencidos · Taller general');
+ body.innerHTML='<div class="rep-empty">Consultando máquinas…</div>';
+ try{
+  const results=await collectGlobalPendingP33(),items=[];
+  results.sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code))
+   .forEach(x=>(x.maint||[]).filter(overdueMaintenanceP64).forEach(r=>items.push(
+    `<div class="rep-item rep-red"><strong>${escPop(x.code)} · ${escPop(x.m.name)}</strong><span>${escPop(r[0]||'Mantenimiento vencido')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`)));
+  renderPopupItems(body,items);
+ }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los mantenimientos.</div>'}
+}
+function wireGeneralWorkshopP66(){
+ const p=new URLSearchParams(location.hash.replace(/^#/,''));
+ const code=p.get('maquina');
+ if(!code||!machines[code]?.general)return;
+ const cards=[...document.querySelectorAll('.status .stat')];
+ if(cards.length>=2){
+  cards[0].classList.add('status-card-clickable');cards[1].classList.add('status-card-clickable');
+  cards[0].onclick=e=>{e.preventDefault();e.stopImmediatePropagation();showGeneralRepairsP66();return false};
+  cards[1].onclick=e=>{e.preventDefault();e.stopImmediatePropagation();showGeneralMaintP66();return false};
+  const a=cards[0].querySelector('small');if(a)a.textContent='Reparaciones pendientes';
+  const b=cards[1].querySelector('small');if(b)b.textContent='Mantenimientos vencidos';
+ }
+}
+window.addEventListener('hashchange',()=>setTimeout(wireGeneralWorkshopP66,350));
+window.addEventListener('load',()=>setTimeout(wireGeneralWorkshopP66,350));
+setTimeout(wireGeneralWorkshopP66,500);
+</script></body></html>
 <style>
 .card{min-height:92px;padding:18px 20px!important}
 .card .linepic,.card .linepicfade,.card .lineico{display:none!important}
