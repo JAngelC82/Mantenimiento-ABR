@@ -476,7 +476,7 @@ async function syncAbrDataP42(){
 }
 function providersHome(){v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>Proveedores</h1><p>Contactos · Suministros · Servicios</p></header><main><div class="grid"><button class="back" onclick="go('')">‹ Inicio</button>${providers.map(p=>`<button class="card" onclick="go('proveedor=${encodeURIComponent(p.id)}')"><span class="provider-logo">${esc(p.logo)}</span><span><b>${esc(p.name)}</b><small>${esc(p.supply)}</small></span></button>`).join("")}</div></main>`}
 function providerPage(id){let p=providers.find(x=>x.id===id);if(!p)return providersHome();let row=(a,b)=>`<div class="row"><span class="lbl">${a}</span>${b||"Pendiente de completar"}</div>`;v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(p.name)}</h1><p>Ficha de proveedor</p></header><main class="provider-detail"><button class="back" onclick="go('proveedores')">‹ Proveedores</button><div class="box"><div style="display:flex;gap:13px;align-items:center"><span class="provider-logo">${esc(p.logo)}</span><h2>${esc(p.name)}</h2></div>${row("Dirección",esc(p.address))}${row("Teléfono",esc(p.phone))}${row("Correo electrónico",p.email?`<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`:"")}${row("Página web",p.web?`<a href="${esc(p.web)}" target="_blank">Abrir web del proveedor</a>`:"")}${row("Máquina / equipo",esc(p.equipment))}${row("Qué nos suministra",esc(p.supply))}${row("Observaciones",esc(p.notes))}</div></main>`}
-function linePage(l){let a=Object.entries(machines).filter(x=>x[1].line===l);v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(l)}</h1><p><span class="line-main-name">${esc(a.length ? a[0][1].lineName : "")}</span></p><button onclick="event.stopPropagation();generateLineMaintenanceReportP74('${esc(l)}')" style="margin-top:14px;border:0;border-radius:14px;padding:11px 15px;font-weight:800;cursor:pointer;background:#fff;color:#123b57;box-shadow:0 4px 14px #0002">📄 Crear informe de mantenimiento</button></header><main><div class="grid"><button class="back" onclick="go('mantenimiento')">‹ Todas las líneas</button>${a.map(([c,m])=>`<button class="card" data-machine="${esc(c)}" onclick="go('maquina=${encodeURIComponent(c)}')"><b>${esc(c)} · ${esc(m.name)}</b><small>${esc(m.lineName)}</small></button>`).join("")}</div></main>`}
+function linePage(l){let a=Object.entries(machines).filter(x=>x[1].line===l);v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc(l)}</h1><p><span class="line-main-name">${esc(a.length ? a[0][1].lineName : "")}</span></p><button onclick="event.stopPropagation();generateLineMaintenanceReportP75('${esc(l)}')" style="margin-top:14px;border:0;border-radius:14px;padding:11px 15px;font-weight:800;cursor:pointer;background:#fff;color:#123b57;box-shadow:0 4px 14px #0002">📄 Crear informe de mantenimiento</button></header><main><div class="grid"><button class="back" onclick="go('mantenimiento')">‹ Todas las líneas</button>${a.map(([c,m])=>`<button class="card" data-machine="${esc(c)}" onclick="go('maquina=${encodeURIComponent(c)}')"><b>${esc(c)} · ${esc(m.name)}</b><small>${esc(m.lineName)}</small></button>`).join("")}</div></main>`}
 function generalWorkshop(c){let m=machines[c],base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`;v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">00</span></div><div class="machineUpper">TALLER</div></div></div><div class="code">00-000</div><div class="machineName">Mantenimiento general de taller</div><div class="nfc">${I.tools}<span>Averías e instalaciones generales · ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Taller siempre operativo</div></header><main class="content"><button class="back" onclick="go('linea=L%C3%8DNEA%2000')">‹ Volver</button><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>1</span></div><small>Reparación pendiente</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos generales</small></div></div><div class="section">MANTENIMIENTO GENERAL DEL TALLER</div><div class="docs"><a class="doc d2" target="_blank" href="${base}#gid=64070560"><span class="ico">${I.tools}</span><span><b>Mantenimiento</b></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b></span><span class="arr">›</span></a></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Taller · Reparaciones generales</div></footer>`}
 function machine(c){let m=machines[c],dfolder=documentationFolders[c]?`https://drive.google.com/drive/folders/${documentationFolders[c]}`:"#",vfolder=videoFolders[c]?`https://drive.google.com/drive/folders/${videoFolders[c]}`:"#",base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`,num=m.line.replace("LÍNEA ","");v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">${esc(num)}</span></div><div class="machineUpper">${esc(m.lineName.toUpperCase())}</div></div></div><div class="code">${esc(c)}</div><div class="machineName">${esc(m.name)}</div><div class="nfc">${I.nfc}<span>Acceso NFC · Mantenimiento ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Siempre en marcha</div></header><main class="content"><button class="back" onclick="go('linea=${encodeURIComponent(m.line)}')">‹ Volver</button><div class="photo"><div><div class="camera">●</div><b>Aquí colocaremos la fotografía<br>real de la máquina</b></div></div><div class="section">ESTADO DE LA MÁQUINA</div><div class="status"><div class="stat"><div class="top red">${I.wrench}<span>—</span></div><small>Reparaciones pendientes</small></div><div class="stat"><div class="top green">${I.cal}<span>—</span></div><small>Mantenimiento al día</small></div><div class="stat"><div class="top orange">${I.warn}<span>—</span></div><small>Avisos activos</small></div><div class="stat"><div class="top navy">${I.clock}</div><small>Última intervención<br><b>—</b></small></div></div><div class="section">DOCUMENTACIÓN Y MANTENIMIENTO</div><div class="docs"><a class="doc d1" target="_blank" href="${dfolder}"><span class="ico">${I.techDoc}</span><span><b>Planos y documentación técnica</b><small>PDF · DXF · fichas · planos</small></span><span class="arr">›</span></a><a class="doc d2" target="_blank" href="${base}#gid=${gids.m}"><span class="ico">${I.tools}</span><span><b>Mantenimientos</b><small>Preventivos y checklists</small></span><span class="arr">›</span></a><a class="doc d3" target="_blank" href="${base}#gid=${gids.r}"><span class="ico">${I.warn}</span><span><b>Reparaciones</b><small>Averías y seguimiento</small></span><span class="arr">›</span></a><a class="doc d4" href="#repuestos" onclick="event.preventDefault();showSparePopupP64();return false"><span class="ico">${I.box}</span><span><b>Repuestos</b><small>Stock y referencias</small></span><span class="arr">›</span></a><a class="doc d5" target="_blank" href="${vfolder}"><span class="ico">${I.videoTech}</span><span><b>Manuales audiovisuales</b><small>Vídeos técnicos</small></span><span class="arr">›</span></a><div class="doc d6 history-click" onclick="showHistoryPopupP27()"><span class="ico">${I.bars}</span><span><b>Historial</b><small>Reparaciones realizadas</small></span><span class="arr">›</span></div></div></main><footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Escanea · Consulta · Mantén</div></footer>`}
 function render(){let h=location.hash.slice(1);if(h==="mantenimiento"){syncAbrDataP42().then(maintenanceHome);return}if(h==="inventario")return inventoryHome();if(h==="proveedores"){suppliersHomeP68();return}if(h.startsWith("proveedor=")){let id=decodeURIComponent(h.slice(10));syncAbrDataP42().then(()=>providerPage(id));return}if(h.startsWith("maquina=")){let c=decodeURIComponent(h.slice(8)).toUpperCase();syncAbrDataP42().then(()=>machines[c]?(machines[c].general?generalWorkshop(c):machine(c)):maintenanceHome());return}if(h.startsWith("linea=")){let l=decodeURIComponent(h.slice(6));syncAbrDataP42().then(()=>linePage(l));return}home()}window.addEventListener("hashchange",render);render();
@@ -778,14 +778,58 @@ window.addEventListener('load',scheduleP26);
 function historyItemP42(r,i){
  return `<div class="rep-item rep-green"><strong>${i+1}. ${escPop(r.repair||'')}</strong><span>${escPop(r.description||'')}</span><span style="margin-top:7px;font-weight:700">Realizada: ${escPop(r.date||'Fecha no registrada')}</span></div>`;
 }
-async function showHistoryPopupP27(){
+/* PRUEBA 76 — Historial leído directamente desde Google Sheets.
+   La versión anterior dependía de ABR_DATA_API_URL, que está vacío, por lo que
+   mostraba solamente la copia de historial integrada en el HTML. */
+const HISTORY_SHEET_ID_P76='1iffHbAYytzBGGYFjR1lf4FbtRfQiRptg21oGyQbjpzc';
+
+function loadHistoryLiveP76(cb){
+ const fn='histP76_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
+ let finished=false;
+ const finish=rows=>{
+   if(finished)return; finished=true;
+   try{cb(rows||[])}finally{
+     try{delete window[fn]}catch(e){}
+     document.getElementById(fn)?.remove();
+   }
+ };
+ window[fn]=j=>{
+   try{
+     const rr=rowsP26(j);
+     const mapped=rr.map(r=>({
+       date:r[0]||'',
+       code:(r[1]||'').toString().trim().toUpperCase(),
+       machine:r[2]||'',
+       repair:r[3]||'',
+       description:r[4]||'',
+       origin:r[5]||'',
+       status:r[6]||''
+     })).filter(r=>r.code||r.repair);
+     repairHistory=mapped;
+     finish(mapped);
+   }catch(e){console.warn('Historial P76',e);finish([])}
+ };
+ const sc=document.createElement('script');
+ sc.id=fn;
+ sc.onerror=()=>finish([]);
+ sc.src=`https://docs.google.com/spreadsheets/d/${HISTORY_SHEET_ID_P76}/gviz/tq?sheet=${encodeURIComponent('Historial')}&headers=2&tqx=responseHandler:${fn};out:json&t=${Date.now()}`;
+ document.head.appendChild(sc);
+ setTimeout(()=>finish([]),6000);
+}
+
+function showHistoryPopupP27(){
  const cur=currentMachineP26();if(!cur)return;
  const body=popupShell('Historial de reparaciones');
- body.innerHTML='<div class="rep-empty">Cargando historial…</div>';
- await syncAbrDataP42();
- const rows=repairHistory.filter(r=>(r.code||'').toUpperCase()===cur.code.toUpperCase());
- if(!rows.length){body.innerHTML='<div class="rep-empty">Todavía no hay reparaciones registradas en el historial.</div>';return}
- renderPopupItems(body,rows.map(historyItemP42));
+ body.innerHTML='<div class="rep-empty">Consultando historial actualizado…</div>';
+ loadHistoryLiveP76(liveRows=>{
+   const source=liveRows.length?liveRows:repairHistory;
+   const rows=source.filter(r=>(r.code||'').toUpperCase()===cur.code.toUpperCase());
+   if(!rows.length){
+     body.innerHTML='<div class="rep-empty">Todavía no hay reparaciones registradas en el historial de esta máquina.</div>';
+     return;
+   }
+   renderPopupItems(body,rows.map(historyItemP42));
+ });
 }
 </script>
 
@@ -931,52 +975,102 @@ function loadWorkshopStatusP71(){
 }
 </script>
 
-<script id="p74-line-maintenance-report">
-function p73Date(v){
+<script id="p75-line-maintenance-report">
+/* PRUEBA 75 — Informe por línea:
+   1) obtiene TODAS las máquinas de la línea;
+   2) consulta la pestaña Mantenimiento de CADA Google Sheet;
+   3) combina las filas;
+   4) conserva solo las asignadas al operario y vencidas / debidas hasta el viernes;
+   5) genera un único PDF. */
+function p75Date(v){
  if(!v)return null;
- if(v instanceof Date)return v;
- const x=String(v).trim(),m=x.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+ const x=String(v).trim();
+ let m=x.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
  if(m)return new Date(+m[3],+m[2]-1,+m[1]);
- const iso=x.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
- if(iso)return new Date(+iso[1],+iso[2]-1,+iso[3]);
- const d=new Date(x);return isNaN(d)?null:d;
+ m=x.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+ if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+ const d=new Date(x); return isNaN(d)?null:d;
 }
-function p73Friday(){
- const d=new Date();d.setHours(0,0,0,0);
- const day=d.getDay();
- let add=(5-day+7)%7;
- // On Saturday/Sunday the next maintenance day is the following Friday.
- d.setDate(d.getDate()+add);
+function p75Friday(){
+ const d=new Date(); d.setHours(0,0,0,0);
+ d.setDate(d.getDate()+((5-d.getDay()+7)%7));
  return d;
 }
-function p73Fmt(d){return d?d.toLocaleDateString('es-ES'):'—'}
-function p73Operator(v){
- const x=String(v||'').toLowerCase();
- return x.includes('operario')||x.includes('trabajador');
+function p75Fmt(d){return d?d.toLocaleDateString('es-ES'):'—'}
+function p75Operator(v){
+ const x=String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ return x.includes('operario') || x.includes('trabajador');
 }
-async function generateLineMaintenanceReportP74(line){
- const list=Object.entries(machines).filter(([c,m])=>m.line===line);
- const friday=p73Friday(), jobs=[];
- for(const [code,m] of list){
-  try{
-   const json=await gvizP26(m.sheet,'Mantenimiento','select *');
-   const rows=rowsP26(json);
-   for(const r of rows){
-    if(!r||!r[0]||!p73Operator(r[2]))continue;
-    const due=p73Date(r[5]);
-    // Only work that is due/overdue by this Friday.
-    if(due && due<=friday)jobs.push({code,name:m.name,type:r[0],desc:r[1]||'',resp:r[2]||'',period:r[3]||'',last:r[4]||'',due:r[5]||''});
+function p75LoadMaintenance(sheetId){
+ return new Promise((resolve,reject)=>{
+  const fn='p75_'+Date.now()+'_'+Math.floor(Math.random()*1e9);
+  let done=false;
+  const finish=(ok,val)=>{
+   if(done)return; done=true;
+   try{delete window[fn]}catch(e){}
+   document.getElementById(fn)?.remove();
+   ok?resolve(val):reject(val);
+  };
+  window[fn]=j=>finish(true,rowsP26(j));
+  const sc=document.createElement('script'); sc.id=fn;
+  sc.onerror=()=>finish(false,new Error('No se pudo consultar la hoja'));
+  sc.src=`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent('Mantenimiento')}&headers=2&tqx=responseHandler:${fn};out:json&t=${Date.now()}`;
+  document.head.appendChild(sc);
+  setTimeout(()=>finish(false,new Error('Tiempo de espera agotado')),8000);
+ });
+}
+async function generateLineMaintenanceReportP75(line){
+ const list=Object.entries(machines)
+   .filter(([code,m])=>m.line===line)
+   .sort((a,b)=>a[0].localeCompare(b[0],undefined,{numeric:true}));
+ if(!list.length){alert('No se han encontrado máquinas para '+line);return}
+
+ const friday=p75Friday(), jobs=[], errors=[];
+ const results=await Promise.allSettled(list.map(async ([code,m])=>{
+   const rows=await p75LoadMaintenance(m.sheet);
+   return {code,m,rows};
+ }));
+ results.forEach((res,i)=>{
+   const [code,m]=list[i];
+   if(res.status!=='fulfilled'){errors.push(code);return}
+   for(const r of res.value.rows){
+     if(!r || !String(r[0]||'').trim()) continue;
+     if(!p75Operator(r[2])) continue;
+     const due=p75Date(r[5]);
+     if(!due || due>friday) continue;
+     jobs.push({
+       code,name:m.name,type:r[0],desc:r[1]||'',resp:r[2]||'',
+       period:r[3]||'',last:r[4]||'',due:r[5]||'',dueDate:due
+     });
    }
-  }catch(e){}
+ });
+ jobs.sort((a,b)=>a.code.localeCompare(b.code,undefined,{numeric:true}) || a.dueDate-b.dueDate);
+
+ if(errors.length){
+   alert('Aviso: no se pudieron consultar estas máquinas: '+errors.join(', ')+'. El informe se generará con las demás.');
  }
- jobs.sort((a,b)=>a.code.localeCompare(b.code)||String(a.type).localeCompare(String(b.type)));
- const title=(list[0]?.[1]?.lineName)||line;
+
+ const title=list[0][1].lineName||line;
  const w=window.open('','_blank');
  if(!w){alert('El navegador ha bloqueado la ventana del informe. Permite ventanas emergentes para generar el PDF.');return}
- const rows=jobs.length?jobs.map((j,i)=>`<tr><td>${i+1}</td><td><b>${escPop(j.code)}</b><br>${escPop(j.name)}</td><td><b>${escPop(j.type)}</b><br><span>${escPop(j.desc||'Sin procedimiento indicado')}</span></td><td>${escPop(j.period||'—')}</td><td>${escPop(j.due||'—')}</td><td class="check">☐</td></tr>`).join(''):`<tr><td colspan="6" class="empty">No hay mantenimientos de operario vencidos o que venzan antes de este viernes.</td></tr>`;
+ const bodyRows=jobs.length?jobs.map((j,i)=>`<tr>
+   <td>${i+1}</td>
+   <td><b>${escPop(j.code)}</b><br>${escPop(j.name)}</td>
+   <td><b>${escPop(j.type)}</b><br><span>${escPop(j.desc||'Sin procedimiento indicado')}</span></td>
+   <td>${escPop(j.resp)}</td>
+   <td>${escPop(j.period||'—')}</td>
+   <td>${escPop(j.due||'—')}</td>
+   <td class="check">☐</td>
+ </tr>`).join(''):`<tr><td colspan="7" class="empty">No hay mantenimientos a cargo del operario vencidos o que deban realizarse antes o durante este viernes.</td></tr>`;
+
  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Informe mantenimiento ${escPop(line)}</title><style>
- @page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172b3a;margin:0}h1{font-size:22px;margin:0 0 4px}.sub{margin:0 0 18px;color:#526574}.meta{display:flex;justify-content:space-between;border-top:2px solid #123b57;border-bottom:1px solid #b9c7d0;padding:9px 0;margin-bottom:14px;font-size:13px}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#123b57;color:#fff;padding:7px;text-align:left}td{border:1px solid #ccd6dc;padding:7px;vertical-align:top}.check{font-size:22px;text-align:center;width:42px}.empty{text-align:center;padding:25px}.foot{margin-top:18px;font-size:10px;color:#657681}.actions{margin:0 0 14px}.actions button{padding:10px 14px;font-weight:bold;cursor:pointer}@media print{.actions{display:none}}
- </style></head><body><div class="actions"><button onclick="window.print()">🖨️ Guardar / imprimir PDF</button></div><h1>Informe semanal de mantenimiento</h1><p class="sub">${escPop(line)} · ${escPop(title)}</p><div class="meta"><span><b>Día previsto de ejecución:</b> viernes ${p73Fmt(friday)}</span><span><b>Responsable:</b> Operario de línea</span></div><table><thead><tr><th>#</th><th>Máquina</th><th>Mantenimiento / procedimiento</th><th>Periodicidad</th><th>Vencimiento</th><th>Hecho</th></tr></thead><tbody>${rows}</tbody></table><p class="foot">Incluye únicamente mantenimientos asignados al operario de línea que estén vencidos o deban realizarse antes o durante el viernes indicado. La periodicidad original se conserva para calcular el siguiente ciclo.</p><script>setTimeout(()=>window.print(),400)<\/script></body></html>`);
+ @page{size:A4;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172b3a;margin:0}h1{font-size:21px;margin:0 0 4px}.sub{margin:0 0 15px;color:#526574}.meta{display:flex;justify-content:space-between;border-top:2px solid #123b57;border-bottom:1px solid #b9c7d0;padding:8px 0;margin-bottom:12px;font-size:12px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#123b57;color:#fff;padding:6px;text-align:left}td{border:1px solid #ccd6dc;padding:6px;vertical-align:top}.check{font-size:20px;text-align:center;width:38px}.empty{text-align:center;padding:24px}.foot{margin-top:14px;font-size:9px;color:#657681}.actions{margin:0 0 12px}.actions button{padding:10px 14px;font-weight:bold;cursor:pointer}@media print{.actions{display:none}}
+ </style></head><body><div class="actions"><button onclick="window.print()">🖨️ Guardar / imprimir PDF</button></div>
+ <h1>Informe semanal de mantenimiento</h1><p class="sub">${escPop(line)} · ${escPop(title)}</p>
+ <div class="meta"><span><b>Máquinas consultadas:</b> ${list.length}</span><span><b>Ejecución:</b> viernes ${p75Fmt(friday)}</span></div>
+ <table><thead><tr><th>#</th><th>Máquina</th><th>Mantenimiento / procedimiento</th><th>Responsable</th><th>Periodicidad</th><th>Vencimiento</th><th>Hecho</th></tr></thead><tbody>${bodyRows}</tbody></table>
+ <p class="foot">El informe se obtiene consultando la pestaña Mantenimiento de todas las máquinas de la línea y seleccionando únicamente trabajos asignados al operario que estén vencidos o deban ejecutarse antes o durante el viernes indicado.</p>
+ <script>setTimeout(()=>window.print(),500)<\/script></body></html>`);
  w.document.close();
 }
 </script>
