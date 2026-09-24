@@ -791,23 +791,30 @@ async function showHistoryPopupP27(){
 
 
 <script id="p66-general-workshop">
-async function showGeneralRepairsP66(){
+function jsonpWorkshopP70(tab,cb){
+ const fn='p70_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
+ window[fn]=j=>{try{cb(rowsP26(j))}finally{delete window[fn];document.getElementById(fn)?.remove()}};
+ const sc=document.createElement('script');sc.id=fn;
+ sc.onerror=()=>{delete window[fn];sc.remove();cb([])};
+ sc.src=`https://docs.google.com/spreadsheets/d/1xRtSH7bi-eECUhgtPTtPPNB9ZAEE38W0vqdQ_SVJDA4/gviz/tq?sheet=${encodeURIComponent(tab)}&headers=2&tqx=responseHandler:${fn};out:json&t=${Date.now()}`;
+ document.head.appendChild(sc);
+ setTimeout(()=>{if(window[fn]){delete window[fn];sc.remove();cb([])}},5000);
+}
+function showGeneralRepairsP66(){
  const body=popupShell('Reparaciones pendientes · Taller general');
  body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{
-  const j=await gvizP26('1xRtSH7bi-eECUhgtPTtPPNB9ZAEE38W0vqdQ_SVJDA4','Reparaciones',"select A,B,C,D,E,F,G where A is not null");
-  const rows=rowsP26(j).filter(activeRepairP65);
-  renderPopupItems(body,rows.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar las reparaciones.</div>';console.warn('Taller reparaciones P69',e)}
+ jsonpWorkshopP70('Reparaciones',rows=>{
+  const a=rows.filter(activeRepairP65);
+  renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
+ });
 }
-async function showGeneralMaintP66(){
+function showGeneralMaintP66(){
  const body=popupShell('Mantenimientos vencidos · Taller general');
  body.innerHTML='<div class="rep-empty">Consultando…</div>';
- try{
-  const j=await gvizP26('1xRtSH7bi-eECUhgtPTtPPNB9ZAEE38W0vqdQ_SVJDA4','Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null");
-  const rows=rowsP26(j).filter(overdueMaintenanceP64);
-  renderPopupItems(body,rows.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`));
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los mantenimientos.</div>';console.warn('Taller mantenimiento P69',e)}
+ jsonpWorkshopP70('Mantenimiento',rows=>{
+  const a=rows.filter(overdueMaintenanceP64);
+  renderPopupItems(body,a.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`));
+ });
 }
 function wireGeneralWorkshopP66(){
  const p=new URLSearchParams(location.hash.replace(/^#/,''));
