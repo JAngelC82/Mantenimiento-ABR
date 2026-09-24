@@ -793,25 +793,21 @@ async function showHistoryPopupP27(){
 <script id="p66-general-workshop">
 async function showGeneralRepairsP66(){
  const body=popupShell('Reparaciones pendientes · Taller general');
- body.innerHTML='<div class="rep-empty">Consultando máquinas…</div>';
+ body.innerHTML='<div class="rep-empty">Consultando…</div>';
  try{
-  const results=await collectGlobalPendingP33(),items=[];
-  results.sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code))
-   .forEach(x=>(x.repairs||[]).filter(activeRepairP65).forEach(r=>items.push(
-    `<div class="rep-item rep-red"><strong>${escPop(x.code)} · ${escPop(x.m.name)}</strong><span>${escPop(r[0]||'Reparación pendiente')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span></div>`)));
-  renderPopupItems(body,items);
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar las reparaciones.</div>'}
+  const j=await gvizP26('1xRtSH7bi-eECUhgtPTtPPNB9ZAEE38W0vqdQ_SVJDA4','Reparaciones',"select A,B,C,D,E,F,G where A is not null");
+  const rows=rowsP26(j).filter(activeRepairP65);
+  renderPopupItems(body,rows.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span><span><b>Urgencia:</b> ${escPop(r[6]||'Sin definir')}</span>${r[3]?`<span><b>Fecha máxima:</b> ${escPop(r[3])}</span>`:''}</div>`));
+ }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar las reparaciones.</div>';console.warn('Taller reparaciones P69',e)}
 }
 async function showGeneralMaintP66(){
  const body=popupShell('Mantenimientos vencidos · Taller general');
- body.innerHTML='<div class="rep-empty">Consultando máquinas…</div>';
+ body.innerHTML='<div class="rep-empty">Consultando…</div>';
  try{
-  const results=await collectGlobalPendingP33(),items=[];
-  results.sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code))
-   .forEach(x=>(x.maint||[]).filter(overdueMaintenanceP64).forEach(r=>items.push(
-    `<div class="rep-item rep-red"><strong>${escPop(x.code)} · ${escPop(x.m.name)}</strong><span>${escPop(r[0]||'Mantenimiento vencido')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`)));
-  renderPopupItems(body,items);
- }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los mantenimientos.</div>'}
+  const j=await gvizP26('1xRtSH7bi-eECUhgtPTtPPNB9ZAEE38W0vqdQ_SVJDA4','Mantenimiento',"select A,B,C,D,E,F,G,H where A is not null");
+  const rows=rowsP26(j).filter(overdueMaintenanceP64);
+  renderPopupItems(body,rows.map((r,i)=>`<div class="rep-item rep-red"><strong>${i+1}. ${escPop(r[0])}</strong><span>${escPop(r[1]||'Sin descripción.')}</span>${r[5]?`<span><b>Próximo mantenimiento:</b> ${escPop(r[5])}</span>`:''}</div>`));
+ }catch(e){body.innerHTML='<div class="rep-empty">No se pudieron cargar los mantenimientos.</div>';console.warn('Taller mantenimiento P69',e)}
 }
 function wireGeneralWorkshopP66(){
  const p=new URLSearchParams(location.hash.replace(/^#/,''));
