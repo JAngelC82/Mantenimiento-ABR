@@ -858,6 +858,7 @@ setTimeout(enforceMachineStatusP67,500);
 </script>
 <script id="p68-suppliers-workshop">
 const SUPPLIERS_SHEET_P68='1jCKI4oHf9vNOPHE_7pHC8fBMMPgiASR4TXFwQxJXsG0';
+const SUPPLIER_URLS_P72={"Suministros Industriales Ibense, S.L.": "https://www.suministrosindustrialesibense.com/", "REHINE Reparaciones Hidráulicas y Nuevos Equipos, S.L.": "https://rehinesl.es/", "BZO Engomados, S.L.U.": "https://bzoengomados.com/", "NEUR INDUSTRIAL, S.L.": "https://www.neur.es/", "Albasistemas y Cerramientos": "https://albasistemas.com/", "Pefersa Suministros Serigráficos, S.L.": "https://www.pefersa.es/es/", "Dielectro Manchego, S.A.": "https://dimae.com/", "Reza Zadeh Kunststoff- und Maschinentechnik GmbH & Co. KG": "https://www.rezazadeh.de/", "Industrial Campollano Ferretería, S.L.": "https://www.ferreteriacampollano.com/"};
 async function suppliersHomeP68(){
  v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>Proveedores</h1><p>Directorio técnico · contactos · suministros</p></header>
  <main><div class="section">PROVEEDORES</div><div id="supplierBubblesP68" class="spare-list-p61"><div class="rep-empty">Consultando proveedores…</div></div></main>
@@ -873,6 +874,7 @@ async function suppliersHomeP68(){
      <div>✉️ <b>Email:</b> ${escPop(r[7]||'Pendiente de completar')}</div>
      <div>☎️ <b>Teléfono:</b> ${escPop(r[6]||'Pendiente de completar')}</div>
      <div>🧰 <b>Especialidad:</b> ${escPop(r[3]||'—')}</div>
+     ${SUPPLIER_URLS_P72[r[1]]?`<div style="margin-top:10px"><a href="${SUPPLIER_URLS_P72[r[1]]}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:800;color:#0a5790;background:#eaf4fb;border:1px solid #b9d8eb;border-radius:999px;padding:7px 11px">🌐 Web</a></div>`:''}
     </div>
    </div>`).join('')||'<div class="rep-empty">No hay proveedores registrados.</div>';
  }catch(e){document.getElementById('supplierBubblesP68').innerHTML='<div class="rep-empty">No se pudieron cargar los proveedores.</div>'}
