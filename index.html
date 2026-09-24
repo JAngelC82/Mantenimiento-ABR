@@ -896,7 +896,39 @@ const obsWorkshopP68=new MutationObserver(()=>setTimeout(wireWorkshopP68,60));
 obsWorkshopP68.observe(document.getElementById('view')||document.body,{childList:true,subtree:true});
 window.addEventListener('hashchange',()=>setTimeout(wireWorkshopP68,250));
 setTimeout(wireWorkshopP68,400);
-</script></body></html>
+</script>
+<script id="p71-workshop-page">
+/* Taller general tratado como una ficha normal: reparaciones, mantenimiento y avisos. */
+function generalWorkshop(c){
+ const m=machines[c],base=`https://docs.google.com/spreadsheets/d/${m.sheet}/edit`;
+ v.innerHTML=`<header class="hero"><div class="headrow"><img class="logo" src="${logo}"><div class="sep"></div><div class="headtxt"><div class="line">LÍNEA <span class="num">00</span></div><div class="machineUpper">TALLER</div></div></div><div class="code">00-000</div><div class="machineName">Mantenimiento general de taller</div><div class="nfc">${I.tools}<span>Averías e instalaciones generales · ABR</span></div><div class="gear">${I.gear}</div><div class="slogan">Taller siempre operativo</div></header>
+ <main class="content"><button class="back" onclick="go('linea=L%C3%8DNEA%2000')">‹ Volver</button>
+ <div class="section">ESTADO GENERAL</div>
+ <div class="status">
+  <div class="stat status-card-clickable" onclick="showGeneralRepairsP66()"><div class="top red">${I.wrench}<span id="p71Rep">…</span></div><small>Reparaciones pendientes</small></div>
+  <div class="stat status-card-clickable" onclick="showGeneralMaintP66()"><div class="top orange">${I.tools}<span id="p71Maint">…</span></div><small>Mantenimientos vencidos</small></div>
+  <div class="stat"><div class="top orange">${I.warn}<span id="p71Avis">…</span></div><small>Avisos activos</small></div>
+ </div>
+ <div class="section">DOCUMENTACIÓN DEL TALLER</div>
+ <div class="docs">
+  <a class="doc d2" href="#mantenimiento" onclick="event.preventDefault();showGeneralMaintP66();return false"><span class="ico">${I.tools}</span><span><b>Mantenimiento</b><small>Plan general del taller</small></span><span class="arr">›</span></a>
+  <a class="doc d3" href="#reparaciones" onclick="event.preventDefault();showGeneralRepairsP66();return false"><span class="ico">${I.warn}</span><span><b>Reparaciones</b><small>Averías e instalaciones generales</small></span><span class="arr">›</span></a>
+ </div></main>
+ <footer class="footer"><div><b>⌂ &nbsp; Mantenimiento ABR</b><br>Control · Organización · Disponibilidad</div><div>Taller · Mantenimiento general</div></footer>`;
+ setTimeout(loadWorkshopStatusP71,80);
+}
+function loadWorkshopStatusP71(){
+ let reps=null,mnts=null;
+ const paint=()=>{
+  if(reps!==null){const e=document.getElementById('p71Rep');if(e)e.textContent=reps}
+  if(mnts!==null){const e=document.getElementById('p71Maint');if(e)e.textContent=mnts}
+  if(reps!==null&&mnts!==null){const e=document.getElementById('p71Avis');if(e)e.textContent=reps+mnts}
+ };
+ jsonpWorkshopP70('Reparaciones',rows=>{reps=rows.filter(activeRepairP65).length;paint()});
+ jsonpWorkshopP70('Mantenimiento',rows=>{mnts=rows.filter(overdueMaintenanceP64).length;paint()});
+}
+</script>
+</body></html>
 <style>
 .card{min-height:92px;padding:18px 20px!important}
 .card .linepic,.card .linepicfade,.card .lineico{display:none!important}
