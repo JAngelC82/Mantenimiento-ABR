@@ -146,6 +146,11 @@
 }
 .supplier-click-p82{cursor:pointer}
 .supplier-click-p82:active{transform:scale(.995)}
+
+/* v88 · prueba visual cierre de reparaciones */
+.rep-done-btn{margin-top:10px;border:0;border-radius:999px;padding:9px 13px;background:#169b55;color:#fff;font-weight:800;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.16);cursor:pointer}
+.rep-done-btn:active{transform:scale(.98)}
+.rep-done-note{display:block;margin-top:6px;font-size:11px;color:#667085}
 </style>
 <style>
 /* PRUEBA 4 — FICHA PATRÓN BLOQUEADA.
@@ -563,7 +568,7 @@ async function showGlobalRepairsP81(){
   const results=await collectGlobalPendingP33();
   const active=results.filter(x=>x.repairs.length).sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code));
   if(!active.length){body.innerHTML='<div class="rep-empty">No hay reparaciones pendientes.</div>';return}
-  renderPopupItems(body,active.map(x=>{let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;x.repairs.forEach(r=>{h+=`<span class="sum-badge sum-rep">🔧 Reparación</span><span>${escPop(r[0]||'Reparación pendiente')}</span>`});return h+'</div>';}));
+  renderPopupItems(body,active.map(x=>{let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;x.repairs.forEach((r,ri)=>{const key=encodeURIComponent(x.code+'|'+String(r[0]||''));h+=`<span class="sum-badge sum-rep">🔧 Reparación</span><span>${escPop(r[0]||'Reparación pendiente')}</span><button class="rep-done-btn" onclick="event.stopPropagation();finishRepairP88('${key}',this)">✓ Operación realizada</button>`});return h+'</div>';}));
  }catch(e){body.innerHTML='<div class="rep-empty">No se han podido cargar las reparaciones.</div>';console.warn('Reparaciones globales P81',e)}
 }
 
@@ -783,6 +788,20 @@ function wirePopups06000(){
 window.addEventListener('p26-disabled-hash',()=>setTimeout(wirePopups06000,250));
 window.addEventListener('p26-disabled-load',()=>setTimeout(wirePopups06000,500));
 const _p24Obs=new MutationObserver(()=>wirePopups06000());/* p26: old 06-only observer disabled */
+
+
+// v88 · prueba del flujo de cierre desde el popup global de Reparaciones.
+// Esta versión valida la interacción sin escribir todavía en Google Sheets.
+function finishRepairP88(encodedKey,btn){
+  const key=decodeURIComponent(encodedKey||'');
+  const p=key.split('|'), code=p.shift()||'', repair=p.join('|')||'Reparación';
+  if(!confirm('¿Marcar esta reparación como realizada?\n\n'+code+' · '+repair)) return;
+  const obs=prompt('Observación de la reparación (opcional):','');
+  if(obs===null) return;
+  const card=btn.closest('.sum-line');
+  btn.disabled=true; btn.textContent='✓ Operación realizada';
+  alert('Prueba v88 correcta.\n\nEl botón, la confirmación y la observación funcionan.\n\nEn esta prueba NO se ha modificado Google Sheets ni el Historial. El siguiente paso es conectar este botón a una escritura autenticada para guardar primero en Historial y después eliminar la reparación pendiente.');
+}
 
 </script>
 <script>
