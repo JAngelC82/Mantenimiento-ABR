@@ -78,7 +78,7 @@
 .sum-rep{background:#ffe0dc;color:#9b2f25!important}.sum-maint{background:#fff0bd;color:#765900!important}
 @media(max-width:480px){.listhead{position:relative!important}.home-summary-btn{position:absolute!important;right:14px!important;top:14px!important;left:auto!important;margin:0!important;width:50px;height:50px;z-index:20}.home-summary-btn svg{width:29px;height:29px}}
 
-/* PRUEBA 81 — cuatro accesos globales: informe, repuestos, reparaciones, mantenimiento */
+/* PRUEBA 90 — botones de mantenimiento realizado y añadir stock en accesos globales */
 .home-repairs-btn{
  position:absolute!important;right:84px!important;top:18px!important;left:auto!important;margin:0!important;
  width:56px;height:56px;border:1px solid rgba(255,255,255,.60);border-radius:50%;background:rgba(5,42,76,.38);color:#fff;cursor:pointer;
@@ -148,7 +148,8 @@
 .supplier-click-p82:active{transform:scale(.995)}
 
 /* v88 · prueba visual cierre de reparaciones */
-.rep-done-btn{margin-top:10px;border:0;border-radius:999px;padding:9px 13px;background:#169b55;color:#fff;font-weight:800;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.16);cursor:pointer}
+.repair-entry-p88{display:block;clear:both;margin:10px 0 16px}.repair-entry-p88 .sum-badge{display:inline-block!important}.repair-entry-p88 .repair-text-p88{display:block!important;margin-top:4px}.rep-done-btn{display:block;clear:both;margin-top:10px;border:0;border-radius:999px;padding:9px 13px;background:#169b55;color:#fff;font-weight:800;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.16);cursor:pointer}
+.maint-entry-p90,.stock-entry-p90{display:block;clear:both;margin:10px 0 16px}.maint-entry-p90 .sum-badge{display:inline-block!important}.maint-text-p90{display:block!important;margin-top:4px}.maint-done-btn,.stock-add-btn{display:block;clear:both;margin-top:10px;border:0;border-radius:999px;padding:9px 13px;color:#fff;font-weight:800;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.16);cursor:pointer}.maint-done-btn{background:#169b55}.stock-add-btn{background:#e27b13}.maint-done-btn:disabled,.stock-add-btn:disabled{opacity:.65;cursor:default}
 .rep-done-btn:active{transform:scale(.98)}
 .rep-done-note{display:block;margin-top:6px;font-size:11px;color:#667085}
 </style>
@@ -555,7 +556,7 @@ async function showGlobalManagerMaintenanceP85(){
   if(!active.length){body.innerHTML='<div class="rep-empty">No hay mantenimientos vencidos a cargo del jefe de mantenimiento.</div>';return}
   renderPopupItems(body,active.map(x=>{
     let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;
-    x.rows.forEach(r=>{h+=`<span class="sum-badge sum-maint">🛠 A cargo del jefe de mantenimiento</span><span>${escPop(r[0]||'Mantenimiento vencido')}</span>`});
+    x.rows.forEach(r=>{const key=encodeURIComponent(x.code+'|'+String(r[0]||''));h+=`<div class="maint-entry-p90"><span class="sum-badge sum-maint">🛠 A cargo del jefe de mantenimiento</span><span class="maint-text-p90">${escPop(r[0]||'Mantenimiento vencido')}</span><button class="maint-done-btn" onclick="event.stopPropagation();finishMaintenanceP90('${key}',this)">✓ Mantenimiento realizado</button></div>`});
     return h+'</div>';
   }));
  }catch(e){body.innerHTML='<div class="rep-empty">No se han podido cargar los mantenimientos.</div>'}
@@ -568,7 +569,7 @@ async function showGlobalRepairsP81(){
   const results=await collectGlobalPendingP33();
   const active=results.filter(x=>x.repairs.length).sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code));
   if(!active.length){body.innerHTML='<div class="rep-empty">No hay reparaciones pendientes.</div>';return}
-  renderPopupItems(body,active.map(x=>{let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;x.repairs.forEach((r,ri)=>{const key=encodeURIComponent(x.code+'|'+String(r[0]||''));h+=`<span class="sum-badge sum-rep">🔧 Reparación</span><span>${escPop(r[0]||'Reparación pendiente')}</span><button class="rep-done-btn" onclick="event.stopPropagation();finishRepairP88('${key}',this)">✓ Operación realizada</button>`});return h+'</div>';}));
+  renderPopupItems(body,active.map(x=>{let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;x.repairs.forEach((r,ri)=>{const key=encodeURIComponent(x.code+'|'+String(r[0]||''));h+=`<div class="repair-entry-p88"><span class="sum-badge sum-rep">🔧 Reparación</span><span class="repair-text-p88">${escPop(r[0]||'Reparación pendiente')}</span><button class="rep-done-btn" onclick="event.stopPropagation();finishRepairP88('${key}',this)">✓ Operación realizada</button></div>`});return h+'</div>';}));
  }catch(e){body.innerHTML='<div class="rep-empty">No se han podido cargar las reparaciones.</div>';console.warn('Reparaciones globales P81',e)}
 }
 
@@ -628,7 +629,7 @@ async function showGlobalSparesP78(){
  try{
   const a=await p78GetGlobalSpares();
   if(!a.length){body.innerHTML='<div class="rep-empty">✓ No hay repuestos en el mínimo o por debajo del mínimo.</div>';return}
-  body.innerHTML=`<div style="margin:0 0 10px;color:#5d7085;font-size:13px"><b>${a.length}</b> repuesto(s) para revisar/pedir · criterio: stock ≤ mínimo</div>`+a.map((x,i)=>`<div class="spare-pill-p61 order" style="margin-bottom:10px"><div class="spare-head-p61"><span><b>${i+1}. ${escPop(x.part)}</b></span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61" style="display:block;line-height:1.5"><div><b>${escPop(x.code)}</b> · ${escPop(x.name)}</div><div>${escPop(x.line||'')}</div><div>Stock: <b>${escPop(x.stock)}</b> · Mínimo: <b>${escPop(x.min)}</b></div>${x.supplier?`<div>Proveedor: ${escPop(x.supplier)}</div>`:''}${/^https?:\/\//i.test(String(x.link||''))?`<div style="margin-top:6px"><a href="${escPop(x.link)}" target="_blank" rel="noopener" style="font-weight:800;color:#0a5790">🌐 Abrir enlace de compra</a></div>`:''}</div></div>`).join('');
+  body.innerHTML=`<div id="sparesCountP90" style="margin:0 0 10px;color:#5d7085;font-size:13px"><b>${a.length}</b> repuesto(s) para revisar/pedir · criterio: stock ≤ mínimo</div>`+a.map((x,i)=>{const key=encodeURIComponent(x.code+'|'+String(x.part||''));return `<div class="spare-pill-p61 order stock-entry-p90" data-stock-entry="1" style="margin-bottom:10px"><div class="spare-head-p61"><span><b>${i+1}. ${escPop(x.part)}</b></span><span class="spare-state-p61 order">PEDIR</span></div><div class="spare-meta-p61" style="display:block;line-height:1.5"><div><b>${escPop(x.code)}</b> · ${escPop(x.name)}</div><div>${escPop(x.line||'')}</div><div>Stock: <b class="stock-value-p90">${escPop(x.stock)}</b> · Mínimo: <b class="stock-min-p90">${escPop(x.min)}</b></div>${x.supplier?`<div>Proveedor: ${escPop(x.supplier)}</div>`:''}${/^https?:\/\//i.test(String(x.link||''))?`<div style="margin-top:6px"><a href="${escPop(x.link)}" target="_blank" rel="noopener" style="font-weight:800;color:#0a5790">🌐 Abrir enlace de compra</a></div>`:''}</div><button class="stock-add-btn" onclick="event.stopPropagation();addStockP90('${key}',this)">＋ Añadir stock</button></div>`}).join('');
  }catch(e){body.innerHTML='<div class="rep-empty">No se pudo completar la consulta de repuestos.</div>'}
 }
 setTimeout(updateGlobalSparesBadgeP78,700);
@@ -801,6 +802,44 @@ function finishRepairP88(encodedKey,btn){
   const card=btn.closest('.sum-line');
   btn.disabled=true; btn.textContent='✓ Operación realizada';
   alert('Prueba v88 correcta.\n\nEl botón, la confirmación y la observación funcionan.\n\nEn esta prueba NO se ha modificado Google Sheets ni el Historial. El siguiente paso es conectar este botón a una escritura autenticada para guardar primero en Historial y después eliminar la reparación pendiente.');
+}
+
+// v90 · prototipos de cierre de mantenimiento y entrada de stock.
+// Igual que Reparaciones, todavía NO escriben en Google Sheets.
+function finishMaintenanceP90(encodedKey,btn){
+  const key=decodeURIComponent(encodedKey||'');
+  const p=key.split('|'), code=p.shift()||'', task=p.join('|')||'Mantenimiento';
+  if(!confirm('¿Marcar este mantenimiento como realizado?\n\n'+code+' · '+task)) return;
+  const obs=prompt('Observaciones del mantenimiento (opcional):','');
+  if(obs===null) return;
+  btn.disabled=true; btn.textContent='✓ Mantenimiento realizado';
+  alert('Prueba v90 correcta.\n\nLa confirmación y las observaciones funcionan.\n\nEn esta fase NO se ha modificado Google Sheets ni el Historial.');
+}
+function refreshSpareCountP90(){
+  const n=document.querySelectorAll('[data-stock-entry="1"]').length;
+  const c=document.getElementById('sparesCountP90');
+  if(c)c.innerHTML=n?`<b>${n}</b> repuesto(s) para revisar/pedir · criterio: stock ≤ mínimo`:'✓ No quedan repuestos en el mínimo o por debajo del mínimo en esta prueba.';
+}
+function addStockP90(encodedKey,btn){
+  const key=decodeURIComponent(encodedKey||'');
+  const p=key.split('|'), code=p.shift()||'', part=p.join('|')||'Repuesto';
+  const card=btn.closest('.stock-entry-p90'); if(!card)return;
+  const stockEl=card.querySelector('.stock-value-p90'), minEl=card.querySelector('.stock-min-p90');
+  const current=Number(String(stockEl?.textContent||0).replace(',','.'))||0;
+  const minimum=Number(String(minEl?.textContent||0).replace(',','.'))||0;
+  const raw=prompt('¿Qué cantidad ha llegado al almacén?\n\n'+code+' · '+part,'');
+  if(raw===null)return;
+  const qty=Number(String(raw).trim().replace(',','.'));
+  if(!Number.isFinite(qty)||qty<=0){alert('Introduce una cantidad mayor que 0.');return}
+  if(!confirm('¿Añadir '+qty+' unidad(es) al stock?\n\nStock actual: '+current+'\nStock resultante: '+(current+qty)))return;
+  const next=current+qty;
+  if(stockEl)stockEl.textContent=String(next).replace('.',',');
+  if(next>minimum){
+    card.remove(); refreshSpareCountP90();
+    alert('Prueba v90 correcta.\n\nStock resultante: '+next+'. Al quedar por encima del mínimo ('+minimum+'), el repuesto desaparece de la lista PEDIR en esta prueba.\n\nTodavía NO se ha modificado Google Sheets.');
+  }else{
+    alert('Prueba v90 correcta.\n\nStock resultante: '+next+'. Como sigue en el mínimo o por debajo ('+minimum+'), continúa apareciendo como PEDIR.\n\nTodavía NO se ha modificado Google Sheets.');
+  }
 }
 
 </script>
