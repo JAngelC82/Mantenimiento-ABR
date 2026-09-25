@@ -1,6 +1,6 @@
 <!doctype html><html lang="es"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 
-<!-- INDEX PRUEBA 85
+<!-- INDEX PRUEBA 87
      Mejora: actualización automática al abrir desde el icono/PWA.
      Si el HTML publicado cambia, fuerza una recarga de red una sola vez por versión.
 -->
@@ -127,7 +127,7 @@
 .portal-card.inventory .portal-ico{background:#edf1f5;color:#263c5a}
 
 .provider-logo{width:54px;height:54px;border-radius:12px;background:#eef4f8;color:#173a5e;display:grid;place-items:center;font-weight:900;border:1px solid #d9e3ea}.provider-detail{padding:14px}.provider-detail .box{background:#fff;border:1px solid #dce4ea;border-radius:14px;padding:16px;margin-bottom:12px}.provider-detail h2{margin:0 0 5px;color:#0d2b50;font-size:21px}.provider-detail .row{padding:10px 0;border-bottom:1px solid #edf1f4}.provider-detail .lbl{font-size:11px;font-weight:800;color:#708293;text-transform:uppercase;display:block;margin-bottom:3px}.provider-detail a{color:#087fbd;text-decoration:none;font-weight:700}
-/* PRUEBA 85 — accesos globales compactos sin círculo */
+/* PRUEBA 87 — accesos globales compactos sin círculo */
 .home-report-btn,.home-spares-btn,.home-repairs-btn,.home-summary-btn{
  background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
  width:38px!important;height:38px!important;top:13px!important;padding:3px!important;
@@ -359,11 +359,11 @@
  .doc .ico{width:34px!important}
 }
 </style>
-<link rel="manifest" href="manifest.webmanifest?v=85"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=85"><link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=85"><link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=85"><style id="p61-spares-style">
+<link rel="manifest" href="manifest.webmanifest?v=87"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=87"><link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=87"><link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=87"><style id="p61-spares-style">
 .spare-list-p61{display:flex;flex-direction:column;gap:10px}.spare-pill-p61{border-radius:16px;padding:12px 14px;background:#fff;border:1px solid #dfe8f0;box-shadow:0 4px 12px #1232}.spare-pill-p61.ok{border-left:6px solid #1e9b50}.spare-pill-p61.order{border-left:6px solid #d63c32;background:#fff7f6}.spare-head-p61{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;font-weight:800}.spare-state-p61{font-size:12px;padding:4px 9px;border-radius:999px;white-space:nowrap}.spare-state-p61.ok{background:#e7f7ed;color:#15743b}.spare-state-p61.order{background:#fde7e5;color:#b62920}.spare-meta-p61{margin-top:7px;font-size:13px;color:#506070;display:flex;gap:12px;flex-wrap:wrap}
 </style>
 <style id="p83-home-actions">
-/* PRUEBA 85 — cuatro accesos globales en matriz 2x2 */
+/* PRUEBA 87 — cuatro accesos globales en matriz 2x2 */
 .home-report-btn,.home-spares-btn,.home-repairs-btn,.home-summary-btn{
   background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
   width:39px!important;height:39px!important;padding:2px!important;display:grid!important;place-items:center!important;
@@ -403,6 +403,33 @@
 @media(max-width:480px){
  .home-summary-btn{right:66px!important;top:8px!important}.home-repairs-btn{right:8px!important;top:8px!important}
  .home-spares-btn{right:66px!important;top:65px!important}.home-report-btn{right:8px!important;top:65px!important}
+}
+</style>
+
+
+<style id="p86-no-manager-alert-badge">
+.home-summary-btn .home-summary-dot,#homeSummaryBadgeP33{display:none!important}
+</style>
+
+
+<style id="p87-home-actions">
+.home-report-btn,.home-spares-btn,.home-repairs-btn,.home-summary-btn{
+ width:62px!important;height:62px!important;padding:1px!important;
+ background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+ display:grid!important;place-items:center!important;z-index:25!important;
+}
+.home-summary-btn{right:82px!important;top:7px!important}
+.home-repairs-btn{right:8px!important;top:7px!important}
+.home-spares-btn{right:82px!important;top:73px!important}
+.home-report-btn{right:8px!important;top:73px!important}
+.home-report-btn svg,.home-spares-btn svg,.home-repairs-btn svg,.home-summary-btn svg{
+ width:58px!important;height:58px!important;display:block!important;
+}
+@media(max-width:480px){
+ .home-summary-btn{right:80px!important;top:7px!important}
+ .home-repairs-btn{right:7px!important;top:7px!important}
+ .home-spares-btn{right:80px!important;top:72px!important}
+ .home-report-btn{right:7px!important;top:72px!important}
 }
 </style>
 
@@ -499,8 +526,8 @@ async function showGlobalMaintenanceP81(){
  }catch(e){body.innerHTML='<div class="rep-empty">No se han podido cargar los mantenimientos.</div>';console.warn('Mantenimientos globales P81',e)}
 }
 async function showGlobalManagerMaintenanceP85(){
- const body=popupShell('Mantenimientos vencidos · Jefe');
- body.innerHTML='<div class="rep-empty">Consultando mantenimientos a cargo del jefe…</div>';
+ const body=popupShell('Mantenimientos vencidos · Jefe de mantenimiento');
+ body.innerHTML='<div class="rep-empty">Consultando mantenimientos a cargo del jefe de mantenimiento…</div>';
  const out=[];
  const entries=Object.entries(machines).filter(([c,m])=>m.sheet);
  try{
@@ -520,10 +547,10 @@ async function showGlobalManagerMaintenanceP85(){
    out.push(...part);
   }
   const active=out.filter(x=>x.rows.length).sort((a,b)=>a.m.line.localeCompare(b.m.line,undefined,{numeric:true})||a.code.localeCompare(b.code));
-  if(!active.length){body.innerHTML='<div class="rep-empty">No hay mantenimientos vencidos a cargo del jefe.</div>';return}
+  if(!active.length){body.innerHTML='<div class="rep-empty">No hay mantenimientos vencidos a cargo del jefe de mantenimiento.</div>';return}
   renderPopupItems(body,active.map(x=>{
     let h=`<div class="sum-line"><strong>${escPop(x.m.line)} · ${escPop(x.m.lineName||'')}<br>${escPop(x.code)} · ${escPop(x.m.name)}</strong>`;
-    x.rows.forEach(r=>{h+=`<span class="sum-badge sum-maint">🛠 Mantenimiento jefe</span><span>${escPop(r[0]||'Mantenimiento vencido')}</span>`});
+    x.rows.forEach(r=>{h+=`<span class="sum-badge sum-maint">🛠 A cargo del jefe de mantenimiento</span><span>${escPop(r[0]||'Mantenimiento vencido')}</span>`});
     return h+'</div>';
   }));
  }catch(e){body.innerHTML='<div class="rep-empty">No se han podido cargar los mantenimientos.</div>'}
@@ -565,7 +592,7 @@ const lineNames={
  "LÍNEA 20":"Cinta de carrocero",
  "LÍNEA 21":"Inyección"
 };
-v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><button class="home-report-btn" title="Informe global de mantenimiento" aria-label="Informe global de mantenimiento" onclick="generateGlobalMaintenanceReportP79()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#2386c8" d="M7 15h21l5 6h24v35H7z"/><path fill="#66b7e6" d="M7 10h19l5 5h26v8H7z"/><rect x="18" y="27" width="30" height="23" rx="2" fill="#fff"/><path d="M24 33h18M24 39h18M24 45h12" stroke="#2386c8" stroke-width="3" stroke-linecap="round"/></svg></button><button class="home-spares-btn" title="Repuestos por pedir" aria-label="Repuestos por pedir" onclick="showGlobalSparesP78()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#f28c18" d="M5 31h18v17H5zM24 22h18v17H24zM10 12h18v17H10z"/><path fill="#fff" opacity=".75" d="M9 34h10v3H9zM28 25h10v3H28zM14 15h10v3H14z"/><path fill="#d96d00" d="M48 32l3 4 5-1 1 5 5 2-3 4 3 4-5 2-1 5-5-1-3 4-4-4-5 1-1-5-5-2 3-4-3-4 5-2 1-5 5 1z"/><circle cx="48" cy="46" r="6" fill="#fff"/></svg><span id="homeSparesBadgeP78" class="home-spares-dot"></span></button><button class="home-repairs-btn" title="Reparaciones pendientes" aria-label="Reparaciones pendientes" onclick="showGlobalRepairsP81()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#e53935" d="M32 3l5 6 8-2 2 8 8 2-2 8 6 5-6 6 2 8-8 2-2 8-8-2-5 7-6-7-8 2-2-8-8-2 2-8-6-6 6-5-2-8 8-2 2-8 8 2z"/><circle cx="32" cy="30" r="18" fill="#fff"/><path d="M19 20c5-2 10 3 8 8l14 14-5 5-14-14c-5 2-10-3-8-8l6 5 5-5z" fill="#c62828"/><path d="M42 17l5 5-13 13-5-5z" fill="#c62828"/></svg></button><button class="home-summary-btn" title="Mantenimientos vencidos · Jefe" aria-label="Mantenimientos vencidos del jefe" onclick="showGlobalManagerMaintenanceP85()"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="15" r="8" fill="#20a35a"/><path d="M9 48c1-13 7-20 15-20s14 7 15 20" fill="#20a35a"/><path d="M37 17l6 6 10-10 4 4-10 10 5 5-5 5-15-15z" fill="#147a43"/><circle cx="50" cy="14" r="3" fill="#147a43"/></svg><span id="homeSummaryBadgeP33" class="home-summary-dot">!</span></button><h1>Mantenimiento ABR</h1><p>Mantenimiento · Reparaciones · Repuestos</p></header>
+v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><button class="home-report-btn" title="Informe global de mantenimiento" aria-label="Informe global de mantenimiento" onclick="generateGlobalMaintenanceReportP79()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#2386c8" d="M7 15h21l5 6h24v35H7z"/><path fill="#66b7e6" d="M7 10h19l5 5h26v8H7z"/><rect x="18" y="27" width="30" height="23" rx="2" fill="#fff"/><path d="M24 33h18M24 39h18M24 45h12" stroke="#2386c8" stroke-width="3" stroke-linecap="round"/></svg></button><button class="home-spares-btn" title="Repuestos por pedir" aria-label="Repuestos por pedir" onclick="showGlobalSparesP78()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#f28c18" d="M5 31h18v17H5zM24 22h18v17H24zM10 12h18v17H10z"/><path fill="#fff" opacity=".75" d="M9 34h10v3H9zM28 25h10v3H28zM14 15h10v3H14z"/><path fill="#d96d00" d="M48 32l3 4 5-1 1 5 5 2-3 4 3 4-5 2-1 5-5-1-3 4-4-4-5 1-1-5-5-2 3-4-3-4 5-2 1-5 5 1z"/><circle cx="48" cy="46" r="6" fill="#fff"/></svg><span id="homeSparesBadgeP78" class="home-spares-dot"></span></button><button class="home-repairs-btn" title="Reparaciones pendientes" aria-label="Reparaciones pendientes" onclick="showGlobalRepairsP81()"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="#e53935" d="M32 3l5 6 8-2 2 8 8 2-2 8 6 5-6 6 2 8-8 2-2 8-8-2-5 7-6-7-8 2-2-8-8-2 2-8-6-6 6-5-2-8 8-2 2-8 8 2z"/><circle cx="32" cy="30" r="18" fill="#fff"/><path d="M19 20c5-2 10 3 8 8l14 14-5 5-14-14c-5 2-10-3-8-8l6 5 5-5z" fill="#c62828"/><path d="M42 17l5 5-13 13-5-5z" fill="#c62828"/></svg></button><button class="home-summary-btn" title="Mantenimientos vencidos · Jefe de mantenimiento" aria-label="Mantenimientos vencidos a cargo del jefe de mantenimiento" onclick="showGlobalManagerMaintenanceP85()"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="15" r="8" fill="#20a35a"/><path d="M9 48c1-13 7-20 15-20s14 7 15 20" fill="#20a35a"/><path d="M37 17l6 6 10-10 4 4-10 10 5 5-5 5-15-15z" fill="#147a43"/><circle cx="50" cy="14" r="3" fill="#147a43"/></svg></button><h1>Mantenimiento ABR</h1><p>Mantenimiento · Reparaciones · Repuestos</p></header>
 <main><div class="grid"><button class="back" onclick="go('')">‹ Inicio</button></div><div class="section" style="padding-left:14px">LÍNEAS DE PRODUCCIÓN</div><div class="grid">${Object.entries(g).map(([l,a])=>`<button class="card" data-line="${esc(l)}" onclick="go('linea=${encodeURIComponent(l)}')"><b>${esc(l)} · ${esc(lineNames[l]||"")}</b><small>${a.length} equipo(s)</small></button>`).join("")}</div></main>`}
 
 /* PRUEBA 78 — lista global de repuestos con stock <= mínimo. */
