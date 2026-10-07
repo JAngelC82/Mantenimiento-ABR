@@ -2289,38 +2289,124 @@ async function showLineManagerMaintenanceP106(line){
 </script>
 
 \n
-\n<style id="v2-19-fixes">
+\n
+<style id="v2-20-supplier-fixes">
 html,body{width:100%;min-height:100%;margin:0!important;padding:0!important;background:#fff!important}
 .app{width:100%!important;max-width:none!important;margin:0!important;min-height:100vh!important}
-.v219-cylinder{position:relative;height:520px;overflow:hidden;perspective:1100px;touch-action:pan-x;background:#fff}
-.v219-stage{position:absolute;inset:48px 0 48px;transform-style:preserve-3d}
-.v219-card{position:absolute!important;left:50%!important;top:50%!important;width:min(88%,650px)!important;min-height:112px!important;margin:0!important;transform-origin:center;transition:transform .34s cubic-bezier(.2,.75,.25,1),opacity .34s,filter .34s;backface-visibility:hidden}
-.v219-card.v219-front{box-shadow:0 12px 28px rgba(16,51,75,.18)!important;border-color:#a9c3d3!important}
-.v219-card b{font-size:20px!important}.v219-card small{display:block;margin-top:8px;color:#687b8d;font-size:14px}
-.v219-nav{position:absolute;left:50%;transform:translateX(-50%);z-index:60;width:56px;height:56px;border:0;border-radius:50%;background:#fff;color:#08709e;font-size:31px;font-weight:900;box-shadow:0 5px 18px rgba(0,0,0,.12)}
-.v219-up{top:2px}.v219-down{bottom:2px}.v219-hint{text-align:center;color:#81919d;font-size:13px;margin-top:-8px;padding-bottom:8px}
-@media(max-width:600px){.v219-cylinder{height:500px}.v219-card{width:88%!important;min-height:108px!important}}
+.v2-supplier-card .supplier-cat-icon{
+  width:54px;height:54px;display:grid;place-items:center;border-radius:14px;
+  background:#e7f5ff;color:#1686c8;font-size:31px;line-height:1;flex:0 0 54px
+}
+.v2-supplier-card[data-cat*="Electrónica"] .supplier-cat-icon{font-family:monospace;font-weight:900}
+.v2-supplier-card[data-cat*="Engomados"] .supplier-cat-icon{transform:rotate(90deg)}
+.v2-supplier-card[data-cat*="Hidráulica"] .supplier-cat-icon{font-size:27px}
+.v2-supplier-card[data-cat*="Neumática"] .supplier-cat-icon{font-size:34px;letter-spacing:-6px}
+.v2-supplier-card[data-cat*="Tampografía"] .supplier-cat-icon{transform:rotate(180deg)}
+.v2-supplier-card .supplier-card-copy{min-width:0;display:block}
+.v2-supplier-card .supplier-card-copy b{display:block}
+.v2-supplier-card .supplier-card-copy small{display:block;margin-top:6px}
 </style>
-<script id="v2-19-fixes-js">
+<script id="v2-20-suppliers-js">
 (function(){
- function esc19(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
- function cyl19(id,cards,hint){return `<div class="v219-cylinder" id="${id}"><button class="v219-nav v219-up" type="button">⌃</button><div class="v219-stage">${cards}</div><button class="v219-nav v219-down" type="button">⌄</button></div><div class="v219-hint">${hint||'Desliza para girar · toca la opción central para entrar'}</div>`}
- function init19(root){if(!root||root.dataset.v219)return;root.dataset.v219='1';const stage=root.querySelector('.v219-stage'),a=[...stage.querySelectorAll('.v219-card')];if(!a.length)return;let active=0,start=null,last=null;const norm=i=>((i%a.length)+a.length)%a.length;
-  function paint(){active=norm(active);a.forEach((el,i)=>{let d=i-active;if(d>a.length/2)d-=a.length;if(d<-a.length/2)d+=a.length;const ad=Math.abs(d);el.classList.toggle('v219-front',d===0);el.style.opacity=ad>3?'0':String(d===0?1:Math.max(.22,1-ad*.23));el.style.pointerEvents=ad<=2?'auto':'none';el.style.zIndex=String(30-ad);el.style.transform=`translate(-50%,-50%) translateY(${d*122}px) translateZ(${d===0?90:35-ad*28}px) rotateX(${-d*9}deg) scale(${d===0?1.08:Math.max(.68,1-ad*.13)})`})}
-  function step(d){active=norm(active+d);paint()}
-  stage.addEventListener('click',e=>{const el=e.target.closest('.v219-card');if(!el)return;const i=Number(el.dataset.idx);if(i!==active){active=i;paint();e.preventDefault();return}if(el.dataset.cat){location.hash='suppliercat='+encodeURIComponent(el.dataset.cat);return}if(el.dataset.supplier){showSupplierDetailP85(Number(el.dataset.supplier));}});
-  root.querySelector('.v219-up')?.addEventListener('click',()=>step(-1));root.querySelector('.v219-down')?.addEventListener('click',()=>step(1));root.addEventListener('pointerdown',e=>{start=last=e.clientY});root.addEventListener('pointermove',e=>{if(start!==null)last=e.clientY});root.addEventListener('pointerup',e=>{if(start===null)return;const dy=(last??e.clientY)-start;start=last=null;if(Math.abs(dy)>32)step(dy<0?1:-1)});paint();
+ function esc20(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+ function catIcon20(c){
+   const x=String(c||'').toLowerCase();
+   if(x.includes('electric')) return '🔌';
+   if(x.includes('electrón')||x.includes('electron')) return '▦';
+   if(x.includes('engom')||x.includes('rodillo')) return '▰';
+   if(x.includes('ferreter')) return '🔩';
+   if(x.includes('hidrául')||x.includes('hidraul')) return '🟡';
+   if(x.includes('mecaniz')) return '🛠️';
+   if(x.includes('neumát')||x.includes('neumat')) return '▭';
+   if(x.includes('tampograf')) return '♟';
+   if(x.includes('suministro')) return '📦';
+   if(x.includes('láser')||x.includes('laser')) return '✴️';
+   return '🏭';
+ }
+ function supplierCylinder20(id,cards,label){
+   return `<div class="v2-cylinder" id="${id}" aria-label="${esc20(label||'Selector giratorio')}">
+    <button type="button" class="v2-cyl-arrow v2-up" aria-label="Opción anterior">⌃</button>
+    <div class="v2-cyl-stage">${cards}</div>
+    <button type="button" class="v2-cyl-arrow v2-down" aria-label="Opción siguiente">⌄</button>
+   </div><div class="v2-cyl-hint">Desliza para girar · toca la opción central para entrar</div>`;
+ }
+ function initSupplier20(root){
+   if(!root||root.dataset.v220)return;
+   root.dataset.v220='1';
+   const stage=root.querySelector('.v2-cyl-stage');
+   const state={active:0,startY:null,lastY:null};
+   const cards=()=>Array.from(stage?.querySelectorAll('.v2-supplier-card')||[]);
+   const norm=(i,n)=>((i%n)+n)%n;
+   function paint(){
+     const a=cards(),n=a.length;if(!n)return;
+     state.active=norm(state.active,n);
+     a.forEach((el,i)=>{
+       let d=i-state.active;if(d>n/2)d-=n;if(d<-n/2)d+=n;
+       const ad=Math.abs(d);
+       el.classList.toggle('v2-front',d===0);el.tabIndex=d===0?0:-1;
+       if(ad>3){el.style.opacity='0';el.style.pointerEvents='none';el.style.transform=`translate(-50%,-50%) translateY(${d*112}px) scale(.55) rotateX(${-d*12}deg) translateZ(-260px)`;return}
+       const y=d*122,scale=d===0?1.08:Math.max(.66,1-ad*.13),z=d===0?90:40-ad*35,rot=-d*9;
+       el.style.opacity=String(d===0?1:Math.max(.24,1-ad*.23));
+       el.style.pointerEvents=ad<=2?'auto':'none';el.style.zIndex=String(20-ad);
+       el.style.transform=`translate(-50%,-50%) translateY(${y}px) translateZ(${z}px) rotateX(${rot}deg) scale(${scale})`;
+     });
+   }
+   function step(d){const n=cards().length;if(!n)return;state.active=norm(state.active+d,n);paint()}
+   stage?.addEventListener('click',e=>{
+     const el=e.target.closest('.v2-supplier-card');if(!el)return;
+     const i=Number(el.dataset.v2Index||0);
+     if(i!==state.active){state.active=i;paint();e.preventDefault();return}
+     if(el.dataset.cat){showSupplierCategoryP117(encodeURIComponent(el.dataset.cat));return}
+     if(el.dataset.supplierIndex!==''){showSupplierDetailP85(Number(el.dataset.supplierIndex));}
+   });
+   root.querySelector('.v2-up')?.addEventListener('click',()=>step(-1));
+   root.querySelector('.v2-down')?.addEventListener('click',()=>step(1));
+   root.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)<8)return;e.preventDefault();step(e.deltaY>0?1:-1)},{passive:false});
+   root.addEventListener('pointerdown',e=>{state.startY=state.lastY=e.clientY;root.setPointerCapture?.(e.pointerId)});
+   root.addEventListener('pointermove',e=>{if(state.startY!=null)state.lastY=e.clientY});
+   root.addEventListener('pointerup',e=>{if(state.startY==null)return;const dy=(state.lastY??e.clientY)-state.startY;state.startY=state.lastY=null;if(Math.abs(dy)>35)step(dy<0?1:-1)});
+   paint();
  }
  window.suppliersHomeP68=async function(){
-  v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>Proveedores</h1><p>Directorio técnico · por categorías</p></header><main class="v2-lines-main"><div class="v2-lines-top"><button class="back" onclick="go('')">‹ Inicio</button><div class="section">CATEGORÍAS</div></div><div id="supplierLoad19" class="rep-empty">Consultando proveedores…</div></main>`;
-  try{const j=await gvizP26(SUPPLIERS_SHEET_P68,'Proveedores',"select A,B,C,D,E,F,G,H,I,J where B is not null");const rows=rowsP26(j).filter(r=>r[1]&&String(r[1]).trim().toLowerCase()!=='proveedor');window.suppliersRowsP82=rows;const cats=[...new Set(rows.map(supplierCategoryP117))].sort((a,b)=>a.localeCompare(b,'es'));const cards=cats.map((c,i)=>{const n=rows.filter(r=>supplierCategoryP117(r)===c).length;return `<button class="card v219-card" data-idx="${i}" data-cat="${esc19(c)}"><b>📁 ${esc19(c)}</b><small>${n} proveedor${n===1?'':'es'}</small></button>`}).join('');const main=document.querySelector('.v2-lines-main');document.getElementById('supplierLoad19')?.remove();main?.insertAdjacentHTML('beforeend',cyl19('supplierCats19',cards));init19(document.getElementById('supplierCats19'));}catch(e){const x=document.getElementById('supplierLoad19');if(x)x.textContent='No se pudieron cargar los proveedores.'}window.scrollTo(0,0);
+   v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>Proveedores</h1><p>Directorio técnico · por categorías</p></header>
+   <main class="v2-lines-main"><div class="v2-lines-top"><button class="back" onclick="go('')">‹ Inicio</button><div class="section">CATEGORÍAS</div></div>
+   <div id="supplierLoad20" class="rep-empty">Consultando proveedores…</div></main>`;
+   try{
+     const j=await gvizP26(SUPPLIERS_SHEET_P68,'Proveedores',"select A,B,C,D,E,F,G,H,I,J where B is not null");
+     const rows=rowsP26(j).filter(r=>r[1]&&String(r[1]).trim().toLowerCase()!=='proveedor');
+     window.suppliersRowsP82=rows;
+     const cats=[...new Set(rows.map(supplierCategoryP117))].sort((a,b)=>a.localeCompare(b,'es'));
+     const cards=cats.map((c,i)=>{
+       const n=rows.filter(r=>supplierCategoryP117(r)===c).length;
+       return `<button type="button" class="card v2-line-card v2-supplier-card" data-v2-index="${i}" data-cat="${esc20(c)}">
+         <span class="supplier-cat-icon">${catIcon20(c)}</span>
+         <span class="supplier-card-copy"><b>${esc20(c)}</b><small>${n} proveedor${n===1?'':'es'}</small></span>
+         <span class="arr">›</span>
+       </button>`;
+     }).join('');
+     document.getElementById('supplierLoad20')?.remove();
+     document.querySelector('.v2-lines-main')?.insertAdjacentHTML('beforeend',supplierCylinder20('v2SupplierCategoryCylinder',cards,'Selector giratorio de categorías de proveedores'));
+     initSupplier20(document.getElementById('v2SupplierCategoryCylinder'));
+   }catch(e){
+     const x=document.getElementById('supplierLoad20');if(x)x.textContent='No se pudieron cargar los proveedores.';
+   }
+   window.scrollTo(0,0);
  };
- window.showSupplierCategoryP117=function(enc){const cat=decodeURIComponent(enc),rows=window.suppliersRowsP82||[],matches=rows.map((r,i)=>({r,i})).filter(x=>supplierCategoryP117(x.r)===cat);const cards=matches.map((x,j)=>`<button class="card v219-card" data-idx="${j}" data-supplier="${x.i}"><b>${esc19(x.r[1])}</b><small>🧰 ${esc19(x.r[3]||'—')}</small></button>`).join('');v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc19(cat)}</h1><p>Proveedores</p></header><main class="v2-machines-main"><div class="v2-machines-top"><button class="back" onclick="suppliersHomeP68()">‹ Categorías</button><div class="section">${esc19(cat.toUpperCase())}</div></div>${cyl19('supplierList19',cards,'Desliza para girar · toca el proveedor central para entrar')}</main>`;init19(document.getElementById('supplierList19'));window.scrollTo(0,0)};
- function route19(){const q=new URLSearchParams(location.hash.replace(/^#/,''));const c=q.get('suppliercat');if(!c)return;if(window.suppliersRowsP82?.length)showSupplierCategoryP117(c);else suppliersHomeP68().then(()=>setTimeout(()=>showSupplierCategoryP117(c),250));}
- addEventListener('hashchange',()=>setTimeout(route19,40));
+ window.showSupplierCategoryP117=function(enc){
+   const cat=decodeURIComponent(enc),rows=window.suppliersRowsP82||[];
+   const matches=rows.map((r,i)=>({r,i})).filter(x=>supplierCategoryP117(x.r)===cat);
+   const cards=matches.map((x,j)=>`<button type="button" class="card v2-line-card v2-supplier-card" data-v2-index="${j}" data-supplier-index="${x.i}">
+     <span class="supplier-cat-icon">${catIcon20(cat)}</span>
+     <span class="supplier-card-copy"><b>${esc20(x.r[1])}</b><small>${esc20(x.r[3]||'—')}</small></span>
+     <span class="arr">›</span>
+   </button>`).join('');
+   v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${esc20(cat)}</h1><p>Proveedores</p></header>
+   <main class="v2-machines-main"><div class="v2-machines-top"><button class="back" onclick="suppliersHomeP68()">‹ Categorías</button><div class="section">${esc20(cat.toUpperCase())}</div></div>
+   ${supplierCylinder20('v2SupplierCylinder',cards,'Selector giratorio de proveedores')}</main>`;
+   initSupplier20(document.getElementById('v2SupplierCylinder'));window.scrollTo(0,0);
+ };
  window.invCameraOpenV211=function(){const i=document.getElementById('invCameraInputV211');if(i)i.click()};
  window.invCameraSelectedV211=function(ev){const file=ev?.target?.files?.[0];if(!file)return;document.getElementById('invCameraPreviewV211')?.remove();const box=document.createElement('div');box.id='invCameraPreviewV211';box.className='inv-camera-preview-v211';const img=document.createElement('img');img.src=URL.createObjectURL(file);img.alt='Foto del material';const msg=document.createElement('b');msg.textContent='Foto preparada · identificación por IA pendiente de conexión';box.append(img,msg);document.querySelector('.inv-add-box')?.appendChild(box)};
-
 })();
 </script>
 </body></html>
