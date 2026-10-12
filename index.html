@@ -1971,7 +1971,7 @@ async function suppliersHomeP68(){
 }
 function showSupplierCategoryP117(enc){
  const cat=decodeURIComponent(enc), rows=window.suppliersRowsP82||[], matches=rows.map((r,i)=>({r,i})).filter(x=>supplierCategoryP117(x.r)===cat);
- v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${escPop(cat)}</h1><p>Proveedores</p></header><main><div class="grid"><button class="back" onclick="suppliersHomeP68()">‹ Categorías</button></div><div class="section">${escPop(cat.toUpperCase())}</div><div class="spare-list-p61">${matches.map(x=>`<button type="button" class="spare-pill-p61 ok supplier-click-p82" style="border-left-color:#0a5790;width:100%;text-align:left" onclick="showSupplierDetailP85(${x.i})"><div class="spare-head-p61"><span><b>${escPop(x.r[1])}</b></span></div><div class="spare-meta-p61" style="display:block;line-height:1.55"><div>🧰 ${escPop(x.r[3]||'—')}</div></div></button>`).join('')}</div></main>`; window.scrollTo(0,0);
+ v.innerHTML=`<header class="listhead"><img class="logo" src="${logo}"><h1>${escPop(cat)}</h1><p>Proveedores</p></header><main><div class="grid"><button class="back" onclick="suppliersHomeP68()">‹ Categorías</button></div><div class="section">${escPop(cat.toUpperCase())}</div><div class="spare-list-p61">${matches.map(x=>`<button type="button" class="spare-pill-p61 ok supplier-click-p82" style="border-left-color:#0a5790;width:100%;text-align:left" onclick="openSupplierP152('${encodeURIComponent(String(x.r[1]||''))}')"><div class="spare-head-p61"><span><b>${escPop(x.r[1])}</b></span></div><div class="spare-meta-p61" style="display:block;line-height:1.55"><div>🧰 ${escPop(x.r[3]||'—')}</div></div></button>`).join('')}</div></main>`; window.scrollTo(0,0);
 }
 function whatsappLinksP117(r){const t=[r[5],r[8]].filter(Boolean).join(' '), re=/https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+/g;return [...new Set(t.match(re)||[])];}
 function supplierWebP85(r){const live=String(r[8]||'').trim();return /^https?:\/\//i.test(live)&&!live.includes('chat.whatsapp.com')?live:(SUPPLIER_URLS_P72[r[1]]||'')}
@@ -2182,6 +2182,16 @@ html,body,#view{width:100%;max-width:100%;overflow-x:hidden!important}
  .listhead.v241-real-subline .p107-sub{bottom:69px!important;font-size:16px!important}
 }
 </style>
+
+<script id="p152-supplier-final-access">
+function openSupplierP152(encName){
+  const name=decodeURIComponent(encName||'');
+  const rows=window.suppliersRowsP82||[];
+  const i=rows.findIndex(r=>String(r[1]||'').trim()===name.trim());
+  if(i<0){ suppliersHomeP68(); return; }
+  showSupplierDetailP85(i);
+}
+</script>
 </body></html>');
  w.document.close();
 
