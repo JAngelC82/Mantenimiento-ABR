@@ -2623,6 +2623,44 @@ header.listhead.v269-inventory-compact .supplier-head-text-v22 h1{
  };
 })();
 </script>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
+})();
+</script>
 </body></html>');
  w.document.close();
 
@@ -2860,6 +2898,44 @@ html,body,#view{width:100%;max-width:100%;overflow-x:hidden!important}
  schedule();
 })();
 </script>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
+})();
+</script>
 </body></html>`);
  w.document.close();
 }
@@ -3057,6 +3133,44 @@ html,body,#view{width:100%;max-width:100%;overflow-x:hidden!important}
  if(root)new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.classList?.contains('v267-workshop-stripes'))))schedule()}).observe(root,{childList:true,subtree:false});
  addEventListener('hashchange',()=>setTimeout(paint,150));
  schedule();
+})();
+</script>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
 })();
 </script>
 </body></html>');
@@ -3273,6 +3387,44 @@ html,body,#view{width:100%;max-width:100%;overflow-x:hidden!important}
  schedule();
 })();
 </script>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
+})();
+</script>
 </body></html>`);w.document.close();return}
  const err=errors.length?`<div class="warn"><b>Aviso:</b> no se pudieron consultar: ${errors.map(escPop).join(', ')}.</div>`:'';
  w.document.open();
@@ -3475,6 +3627,44 @@ html,body,#view{width:100%;max-width:100%;overflow-x:hidden!important}
  if(root)new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.classList?.contains('v267-workshop-stripes'))))schedule()}).observe(root,{childList:true,subtree:false});
  addEventListener('hashchange',()=>setTimeout(paint,150));
  schedule();
+})();
+</script>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
 })();
 </script>
 </body></html>`);
@@ -4513,4 +4703,42 @@ addEventListener('hashchange',()=>setTimeout(()=>applyV261(document),60));
  #v260InventoryHeader .p107-title,#v259InventoryHeader .p107-title,header.listhead.v269-inventory-compact h1 {font-size:23px!important}
 }
 </style>
+
+<script id="v2-71-proveedores-fichas-fix">
+/* La navegación de las fichas se instala después de todas las versiones
+   anteriores para evitar que los controladores antiguos la sobrescriban. */
+(function(){
+  function bindSupplierDetailNavigation(){
+    const root=document.getElementById('supplierList22');
+    if(!root || root.dataset.detailFix71) return;
+    root.dataset.detailFix71='1';
+    root.addEventListener('click',function(e){
+      const card=e.target.closest('.v2-supplier-card[data-supplier-index]');
+      if(!card || !root.contains(card)) return;
+      if(!card.classList.contains('v2-front')) return; // Mantener giro del carrusel
+      const idx=Number(card.dataset.supplierIndex);
+      const row=(window.suppliersRowsP82||[])[idx];
+      if(!row) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if(typeof window.showSupplierDetailP132==='function'){
+        window.showSupplierDetailP132(encodeURIComponent(String(row[1]||'')));
+      } else if(typeof showSupplierDetailP85==='function'){
+        showSupplierDetailP85(idx);
+      }
+    },true);
+  }
+  // Se conserva la función de categorías original y se añade el enlace
+  // a las fichas después de que se dibuje el carrusel.
+  const previous=window.showSupplierCategoryP117;
+  if(typeof previous==='function'){
+    window.showSupplierCategoryP117=function(encodedCategory){
+      const result=previous.apply(this,arguments);
+      bindSupplierDetailNavigation();
+      return result;
+    };
+  }
+})();
+</script>
 </body></html>
