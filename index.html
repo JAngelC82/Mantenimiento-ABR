@@ -3704,7 +3704,7 @@ async function showLineManagerMaintenanceP106(line){
  };
  window.showSupplierCategoryP117=function(enc){
   const cat=decodeURIComponent(enc),rows=window.suppliersRowsP82||[],matches=rows.map((r,i)=>({r,i})).filter(x=>supplierCategoryP117(x.r)===cat);
-  const cards=matches.map((x,j)=>`<button type="button" class="card v2-spin-card v2-supplier-card" data-v2-index="${j}" data-supplier-index="${x.i}"><img class="supplier-img-v22" src="${icon22(cat)}" alt=""><span class="supplier-copy-v22"><b>${esc22(x.r[1])}</b><small>${esc22(x.r[3]||'')}</small></span><span class="arr">›</span></button>`).join('');
+  const cards=matches.map((x,j)=>`<button type="button" class="card v2-spin-card v2-supplier-card" data-v2-index="${j}" data-supplier-index="${x.i}" onclick="event.stopPropagation();event.stopImmediatePropagation();window.showSupplierDetailP85(Number(this.dataset.supplierIndex))"><img class="supplier-img-v22" src="${icon22(cat)}" alt=""><span class="supplier-copy-v22"><b>${esc22(x.r[1])}</b><small>${esc22(x.r[3]||'')}</small></span><span class="arr">›</span></button>`).join('');
   v.innerHTML=supplierHead22(esc22(cat),'Proveedores')+`<main class="v2-machines-main"><div class="v2-machines-top"><button class="back" onclick="suppliersHomeP68()">‹ Categorías</button></div>${cylinder22('supplierList22',cards)}</main>`;
   init22(document.getElementById('supplierList22'));window.scrollTo(0,0);
  };
@@ -4590,29 +4590,4 @@ width:34.8px!important;height:34.8px!important;object-fit:contain!important;disp
 </script>
 
 
-<script id="v2-77-provider-card-direct-open">
-(function(){
- 'use strict';
- // Los globos reales del carrusel son .v2-supplier-card, no .supplier-click-p82.
- // Interceptar en captura evita los controladores heredados que bloquean el toque.
- document.addEventListener('click',function(event){
-   const card=event.target.closest('#supplierList22 .v2-supplier-card');
-   if(!card || !card.classList.contains('v2-front'))return;
-   const index=Number(card.dataset.supplierIndex);
-   if(!Number.isInteger(index)||index<0)return;
-   event.preventDefault();event.stopImmediatePropagation();
-   if(typeof window.showSupplierDetailP85==='function')window.showSupplierDetailP85(index);
- },true);
- // Accesibilidad: Enter y espacio abren la misma ficha.
- document.addEventListener('keydown',function(event){
-   if(event.key!=='Enter'&&event.key!==' ')return;
-   const card=event.target.closest('#supplierList22 .v2-supplier-card.v2-front');
-   if(!card)return;
-   const index=Number(card.dataset.supplierIndex);
-   if(!Number.isInteger(index)||index<0)return;
-   event.preventDefault();event.stopImmediatePropagation();
-   if(typeof window.showSupplierDetailP85==='function')window.showSupplierDetailP85(index);
- },true);
-})();
-</script>
 </body></html>
