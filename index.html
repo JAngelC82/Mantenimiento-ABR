@@ -2139,10 +2139,6 @@ html,body{max-width:100%;overflow-x:hidden!important} .provider-detail{max-width
  const oldCat132=window.showSupplierCategoryP117;
  window.showSupplierCategoryP117=function(enc){
    oldCat132(enc);
-   setTimeout(()=>{document.querySelectorAll('#supplierList22 .v2-supplier-card').forEach(el=>{
-     const idx=Number(el.dataset.supplierIndex),r=(window.suppliersRowsP82||[])[idx];if(!r)return;
-     el.onclick=function(ev){if(!this.classList.contains('v2-front'))return;ev.stopPropagation();window.showSupplierDetailP132(encodeURIComponent(r[1]));};
-   });},0);
  };
  // Taller debe ser una línea estándar: conserva los cuatro contadores/estados y añade los 3 grupos.
  const oldWG132=window.workshopGroupsP130;
@@ -4521,36 +4517,75 @@ width:34.8px!important;height:34.8px!important;object-fit:contain!important;disp
 </style>
 
 
-<script id="v2-72-navigation-clean">
+<script id="v2-75-supplier-navigation">
 (function(){
-  let currentCategory='';
-  const oldCategory=window.showSupplierCategoryP117;
-  if(typeof oldCategory==='function'){
-    window.showSupplierCategoryP117=function(enc){currentCategory=enc;return oldCategory.apply(this,arguments);};
-  }
-  document.addEventListener('click',function(e){
-    const card=e.target.closest('#supplierList22 .v2-supplier-card');
-    if(!card)return;
-    if(!card.classList.contains('v2-front'))return;
-    const i=Number(card.dataset.supplierIndex);
-    const row=(window.suppliersRowsP82||[])[i];
-    if(!row)return;
-    e.preventDefault();e.stopImmediatePropagation();
-    if(typeof showSupplierDetailP85==='function')showSupplierDetailP85(i);
-  },true);
-  let startX=0,startY=0;
-  document.addEventListener('touchstart',e=>{if(e.touches.length===1){startX=e.touches[0].clientX;startY=e.touches[0].clientY;}},{passive:true});
-  document.addEventListener('touchend',e=>{
-    if(!e.changedTouches.length)return;
-    const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;
-    if(startX>65||dx<110||Math.abs(dy)>Math.abs(dx)*.7)return;
-    const main=document.querySelector('.provider-detail');
-    if(main && currentCategory && typeof window.showSupplierCategoryP117==='function'){
-      e.preventDefault();window.showSupplierCategoryP117(currentCategory);
-    }else if(document.getElementById('supplierList22') && typeof suppliersHomeP68==='function'){
-      e.preventDefault();suppliersHomeP68();
-    }
-  },{passive:false});
+ 'use strict';
+ // Un único controlador para el carrusel de proveedores y el historial del navegador.
+ const baseHome=window.suppliersHomeP68;
+ const baseCategory=window.showSupplierCategoryP117;
+ const baseDetail=window.showSupplierDetailP85;
+ if(typeof baseHome!=='function'||typeof baseCategory!=='function'||typeof baseDetail!=='function')return;
+ let restoring=false;
+ let currentCategory='';
+ const inSuppliers=()=>location.hash==='#proveedores';
+ function record(page,cat,index){
+   if(restoring||!inSuppliers())return;
+   const state={...(history.state||{}),abrSupplier75:{page,cat:cat||'',index:Number.isInteger(index)?index:null}};
+   history.pushState(state,'',location.href);
+ }
+ function home(){
+   currentCategory='';
+   const result=baseHome.apply(this,arguments);
+   if(!restoring&&inSuppliers())history.replaceState({...(history.state||{}),abrSupplier75:{page:'home'}},'',location.href);
+   return result;
+ }
+ function category(enc){
+   currentCategory=decodeURIComponent(String(enc||''));
+   const result=baseCategory.call(this,encodeURIComponent(currentCategory));
+   record('category',currentCategory);
+   return result;
+ }
+ function detail(index){
+   const i=Number(index),rows=window.suppliersRowsP82||[];
+   if(!Number.isInteger(i)||i<0||i>=rows.length)return;
+   currentCategory=typeof supplierCategoryP117==='function'?supplierCategoryP117(rows[i]):currentCategory;
+   const result=baseDetail.call(this,i);
+   record('detail',currentCategory,i);
+   return result;
+ }
+ window.suppliersHomeP68=home;
+ window.showSupplierCategoryP117=category;
+ window.showSupplierDetailP85=detail;
+ window.openSupplierP152=function(enc){
+   const name=decodeURIComponent(String(enc||''));
+   const i=(window.suppliersRowsP82||[]).findIndex(r=>String(r[1]||'').trim()===name.trim());
+   if(i>=0)detail(i);
+ };
+ // Captura el toque del globo central antes de los controladores antiguos.
+ document.addEventListener('click',function(e){
+   const card=e.target.closest('#supplierList22 .v2-supplier-card');
+   if(!card||!card.classList.contains('v2-front'))return;
+   const index=Number(card.dataset.supplierIndex);
+   if(!Number.isInteger(index))return;
+   e.preventDefault();e.stopImmediatePropagation();
+   detail(index);
+ },true);
+ // El gesto nativo Atrás de Chrome activa popstate: ficha -> categoría -> categorías.
+ window.addEventListener('popstate',function(e){
+   if(!inSuppliers())return;
+   const state=e.state&&e.state.abrSupplier75;
+   if(!state)return;
+   restoring=true;
+   try{
+     if(state.page==='detail'&&Number.isInteger(state.index)){
+       currentCategory=state.cat||'';baseDetail(state.index);
+     }else if(state.page==='category'){
+       currentCategory=state.cat||'';baseCategory(encodeURIComponent(currentCategory));
+     }else if(state.page==='home'){
+       currentCategory='';baseHome();
+     }
+   }finally{restoring=false;}
+ });
 })();
 </script>
 
